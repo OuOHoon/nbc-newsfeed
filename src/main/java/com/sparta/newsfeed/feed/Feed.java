@@ -3,16 +3,18 @@ package com.sparta.newsfeed.feed;
 import com.sparta.newsfeed.Timestamped;
 import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Feed")
+@Getter
 @NoArgsConstructor
 public class Feed extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long feed_id;
 
     @Column
     private String title;
