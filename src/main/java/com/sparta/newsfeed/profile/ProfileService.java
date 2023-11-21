@@ -17,11 +17,11 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
 
-    public ProfileResponseDto findOne(Long userId) {
+    public ProfileResponseDto findProfile(Long userId) {
         return toResponseDto(profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new));
     }
 
-    public ProfileResponseDto create(Long userId, ProfileRequestDto request) {
+    public ProfileResponseDto createProfile(Long userId, ProfileRequestDto request) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
         Profile profile = Profile.builder()
                 .nickname(request.getNickname())
@@ -33,7 +33,7 @@ public class ProfileService {
     }
 
     @Transactional
-    public ProfileResponseDto update(Long userId, String username, ProfileRequestDto request) {
+    public ProfileResponseDto updateProfile(Long userId, String username, ProfileRequestDto request) {
         Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
         if (!profile.getUser().getUsername().equals(username)) {
             throw new InvalidUserException();
