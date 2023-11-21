@@ -16,10 +16,10 @@ public class Feed extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long feed_id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String contents;
 
     @ManyToOne
