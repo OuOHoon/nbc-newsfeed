@@ -22,7 +22,6 @@ public class Profile {
     @Column(length = 255)
     private String nickname;
 
-
     @Column(length = 255)
     private String introduction;
 
@@ -33,5 +32,9 @@ public class Profile {
     public void update(String nickname, String introduction) {
         this.nickname = nickname;
         this.introduction = introduction;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

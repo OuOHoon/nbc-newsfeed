@@ -4,6 +4,8 @@ import com.sparta.newsfeed.profile.dto.ProfileRequestDto;
 import com.sparta.newsfeed.profile.dto.ProfileResponseDto;
 import com.sparta.newsfeed.user.InvalidUserException;
 import com.sparta.newsfeed.user.NotFoundUserException;
+import com.sparta.newsfeed.user.User;
+import com.sparta.newsfeed.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
 
     public ProfileResponseDto findOne(Long userId) {
         return toResponseDto(profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new));
+    }
+
+    public ProfileResponseDto create(Long userId, ProfileRequestDto request) {
+        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        Profile profile = Profile.builder()
+                .nickname(request.getNickname())
+                .introduction(request.getIntroduction())
+                .build();
+        profile.setUser(user);
+        profileRepository.save(profile);
+        return toResponseDto(profile);
     }
 
     @Transactional
