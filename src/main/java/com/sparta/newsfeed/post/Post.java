@@ -1,4 +1,4 @@
-package com.sparta.newsfeed.feed;
+package com.sparta.newsfeed.post;
 
 import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "Feed")
 @Getter
 @NoArgsConstructor
-public class Feed {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +31,14 @@ public class Feed {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Feed(FeedRequestDto dto, User user){
+    public Post(PostRequestDto dto, User user){
         this.title = dto.getTitle();
         this.contents = dto.getContents();
         this.user = user;
         this.createdAt = LocalDateTime.now();
     }
 
-    public void update(FeedRequestDto requestDto) {
+    public void update(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
