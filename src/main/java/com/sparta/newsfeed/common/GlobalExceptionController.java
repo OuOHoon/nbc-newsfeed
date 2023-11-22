@@ -21,4 +21,11 @@ public class GlobalExceptionController {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
                 HttpStatus.BAD_REQUEST.value(), null));
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<BaseResponse<Void>> invalidUserException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), null));
+
+    }
 }
