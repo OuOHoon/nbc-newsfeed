@@ -2,6 +2,9 @@ package com.sparta.newsfeed.user;
 
 import com.sparta.newsfeed.common.BaseResponse;
 import com.sparta.newsfeed.security.JwtUtil;
+import com.sparta.newsfeed.user.dto.LoginRequestDto;
+import com.sparta.newsfeed.user.dto.SignupRequestDto;
+import com.sparta.newsfeed.user.dto.SignupResponseDto;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,19 +25,19 @@ public class UserController {
 
     //회원가입
     @PostMapping("/signup")
-    public ResponseEntity<BaseResponse<com.sparta.newsfeed.user.SignupResponseDto>> signup(@Valid @RequestBody com.sparta.newsfeed.user.SignupRequestDto requestDto) {
+    public ResponseEntity<BaseResponse<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         try {
             userService.signup(requestDto);
         } catch (IllegalArgumentException e) {
             //존재하는 아이디일 시 오류메시지 반환
             return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), HttpStatus.BAD_REQUEST.value(), null));
         }
-        return ResponseEntity.badRequest().body(BaseResponse.of("회원가입 성공", HttpStatus.CREATED.value(), new com.sparta.newsfeed.user.SignupResponseDto(requestDto.getUsername())));
+        return ResponseEntity.badRequest().body(BaseResponse.of("회원가입 성공", HttpStatus.CREATED.value(), new SignupResponseDto(requestDto.getUsername())));
     }
 
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<BaseResponse<Void>> login(@RequestBody com.sparta.newsfeed.user.LoginRequestDto requestDto, HttpServletResponse response) {
+    public ResponseEntity<BaseResponse<Void>> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response) {
         try {
             userService.login(requestDto);
         } catch (IllegalArgumentException e) {

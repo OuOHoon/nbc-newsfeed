@@ -1,5 +1,7 @@
 package com.sparta.newsfeed.user;
 
+import com.sparta.newsfeed.user.dto.LoginRequestDto;
+import com.sparta.newsfeed.user.dto.SignupRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     //회원가입
-    public void signup(com.sparta.newsfeed.user.SignupRequestDto requestDto) {
+    public void signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
 
@@ -25,7 +27,7 @@ public class UserService {
     }
 
     //로그인
-    public void login(com.sparta.newsfeed.user.LoginRequestDto requestDto) {
+    public void login(LoginRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 

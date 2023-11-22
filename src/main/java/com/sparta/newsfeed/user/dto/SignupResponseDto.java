@@ -1,4 +1,4 @@
-package com.sparta.newsfeed.user;
+package com.sparta.newsfeed.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
 public class SignupResponseDto {
 
