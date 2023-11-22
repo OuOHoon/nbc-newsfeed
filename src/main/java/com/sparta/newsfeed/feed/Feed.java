@@ -31,4 +31,9 @@ public class Feed extends Timestamped {
         this.contents = dto.getContents();
         this.user = user;
     }
+
+    public void update(FeedRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+    }
 }
