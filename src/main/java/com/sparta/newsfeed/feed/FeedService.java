@@ -4,6 +4,8 @@ import com.sparta.newsfeed.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class FeedService {
 
@@ -12,6 +14,13 @@ public class FeedService {
     public FeedResponseDto createFeed(FeedRequestDto requestDto, User user) {
         Feed feed = feedRepository.save(new Feed(requestDto, user));
         return new FeedResponseDto(feed);
+    }
+
+    public List<FeedResponseDto> getAllFeeds() {
+        return feedRepository.findAllByOrderByCreatedAtDesc()
+                .stream()
+                .map(FeedResponseDto::new)
+                .toList();
     }
 
     public FeedResponseDto getFeed(Long id) {
@@ -25,6 +34,13 @@ public class FeedService {
         checkUser(feed, user);
         feed.update(requestDto);
         return new FeedResponseDto(feed);
+    }
+
+    @Transactional
+    public void deleteFeed(Long id, User user) {
+        Feed feed = findFeed(id);
+        checkUser(feed, user);
+        feedRepository.delete(feed);
     }
 
     private Feed findFeed(Long id) {

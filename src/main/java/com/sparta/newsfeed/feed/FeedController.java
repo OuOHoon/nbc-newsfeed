@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
@@ -19,6 +21,12 @@ public class FeedController {
         return ResponseEntity.ok(BaseResponse.of("Feed 작성", 201, dto));
     }
 
+    @GetMapping
+    public ResponseEntity<BaseResponse<List<FeedResponseDto>>> getAllFeeds(){
+        List<FeedResponseDto> feedList = feedService.getAllFeeds();
+        return ResponseEntity.ok(BaseResponse.of("뉴스피드 페이지", 201, feedList));
+    }
+
     @GetMapping("/{postId}")
     public ResponseEntity<BaseResponse<FeedResponseDto>> getFeed(@PathVariable Long postId){
         FeedResponseDto dto = feedService.getFeed(postId);
@@ -29,5 +37,11 @@ public class FeedController {
     public ResponseEntity<BaseResponse<FeedResponseDto>> updateFeed(@PathVariable Long postId, @RequestBody FeedRequestDto requestDto, User user){
         FeedResponseDto dto = feedService.updateFeed(postId, requestDto, user);
         return ResponseEntity.ok(BaseResponse.of("선택 Feed 수정", 201, dto));
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<BaseResponse<FeedResponseDto>> deleteFeed(@PathVariable Long postId, User user){
+        feedService.deleteFeed(postId, user);
+        return ResponseEntity.ok(BaseResponse.of("선택 Feed 삭제", 201, null));
     }
 }
