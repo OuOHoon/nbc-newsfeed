@@ -1,10 +1,13 @@
 package com.sparta.newsfeed.feed;
 
 import com.sparta.newsfeed.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class FeedService {
@@ -16,11 +19,11 @@ public class FeedService {
         return new FeedResponseDto(feed);
     }
 
-    public List<FeedResponseDto> getAllFeeds() {
-        return feedRepository.findAllByOrderByCreatedAtDesc()
-                .stream()
-                .map(FeedResponseDto::new)
-                .toList();
+    public Page<FeedResponseDto> getAllFeeds(@RequestParam("page") int page) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "CreatedAt");
+        Pageable pageable = PageRequest.of(page, 30, sort);
+        Page<Feed> feedList = feedRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return feedList.map(FeedResponseDto::new);
     }
 
     public FeedResponseDto getFeed(Long id) {
