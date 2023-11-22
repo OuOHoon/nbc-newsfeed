@@ -2,7 +2,9 @@ package com.sparta.newsfeed.feed;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class FeedResponseDto {
     private String title;

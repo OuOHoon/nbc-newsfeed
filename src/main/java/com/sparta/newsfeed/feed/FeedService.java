@@ -1,6 +1,7 @@
 package com.sparta.newsfeed.feed;
 
 import com.sparta.newsfeed.user.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,15 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
+@RequiredArgsConstructor
 public class FeedService {
 
-    private FeedRepository feedRepository;
+    private final FeedRepository feedRepository;
 
     public Long createFeed(FeedRequestDto requestDto, User user) {
         Feed feed = feedRepository.save(new Feed(requestDto, user));
         return feed.getFeed_id();
     }
 
+    @Transactional
     public Page<FeedResponseDto> getAllFeeds(@RequestParam("page") int page) {
         Sort sort = Sort.by(Sort.Direction.DESC, "CreatedAt");
         Pageable pageable = PageRequest.of(page, 30, sort);
@@ -32,11 +35,10 @@ public class FeedService {
     }
 
     @Transactional
-    public FeedResponseDto updateFeed(Long id, FeedRequestDto requestDto, User user) {
+    public void updateFeed(Long id, FeedRequestDto requestDto, User user) {
         Feed feed = findFeed(id);
         checkUser(feed, user);
         feed.update(requestDto);
-        return new FeedResponseDto(feed);
     }
 
     @Transactional
