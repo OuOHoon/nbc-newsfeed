@@ -13,8 +13,9 @@ import lombok.Setter;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    @GeneratedValue
+    @Column(name = "user_id")
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -22,8 +23,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "profile_id")
+    @OneToOne(mappedBy = "user")
     private Profile profile;
 
     public User(String username, String password) {

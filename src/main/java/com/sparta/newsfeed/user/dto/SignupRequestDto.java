@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 public class SignupRequestDto {
 
     @Pattern(regexp = "^[a-z0-9]{6,12}$")
