@@ -16,39 +16,39 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public Long createFeed(PostRequestDto requestDto, User user) {
+    public Long createPost(PostRequestDto requestDto, User user) {
         Post post = postRepository.save(new Post(requestDto, user));
         return post.getId();
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getAllFeeds(@RequestParam("page") int page) {
+    public Page<PostResponseDto> getAllPosts(@RequestParam("page") int page) {
         Sort sort = Sort.by(Sort.Direction.DESC, "CreatedAt");
         Pageable pageable = PageRequest.of(page, 30, sort);
-        Page<Post> feedList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-        return feedList.map(PostResponseDto::new);
+        Page<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return postList.map(PostResponseDto::new);
     }
 
-    public PostResponseDto getFeed(Long id) {
-        Post post = findFeed(id);
+    public PostResponseDto getPost(Long id) {
+        Post post = findPost(id);
         return new PostResponseDto(post);
     }
 
     @Transactional
-    public void updateFeed(Long id, PostRequestDto requestDto, User user) {
-        Post post = findFeed(id);
+    public void updatePost(Long id, PostRequestDto requestDto, User user) {
+        Post post = findPost(id);
         checkUser(post, user);
         post.update(requestDto);
     }
 
     @Transactional
-    public void deleteFeed(Long id, User user) {
-        Post post = findFeed(id);
+    public void deletePost(Long id, User user) {
+        Post post = findPost(id);
         checkUser(post, user);
         postRepository.delete(post);
     }
 
-    private Post findFeed(Long id) {
+    private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 피드는 존재하지 않습니다.")
         );

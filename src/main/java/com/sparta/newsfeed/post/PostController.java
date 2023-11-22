@@ -19,34 +19,34 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<RedirectView> createFeed(@RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        Long postId = postService.createFeed(requestDto, userDetails.getUser());
+    public ResponseEntity<RedirectView> createPost(@RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        Long postId = postService.createPost(requestDto, userDetails.getUser());
         RedirectView redirectView = new RedirectView("/api/posts/" + postId);
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY.value()).body(redirectView);
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponse<Page<PostResponseDto>>> getAllFeeds(@RequestParam("page") int page){
-        Page<PostResponseDto> feedList = postService.getAllFeeds(page);
-        return ResponseEntity.ok(BaseResponse.of("뉴스피드 페이지", HttpStatus.OK.value(), feedList));
+    public ResponseEntity<BaseResponse<Page<PostResponseDto>>> getAllPosts(@RequestParam("page") int page){
+        Page<PostResponseDto> postList = postService.getAllPosts(page);
+        return ResponseEntity.ok(BaseResponse.of("뉴스피드 페이지", HttpStatus.OK.value(), postList));
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<BaseResponse<PostResponseDto>> getFeed(@PathVariable Long postId){
-        PostResponseDto dto = postService.getFeed(postId);
-        return ResponseEntity.ok(BaseResponse.of("선택 Feed 조회", HttpStatus.OK.value(), dto));
+    public ResponseEntity<BaseResponse<PostResponseDto>> getPost(@PathVariable Long postId){
+        PostResponseDto dto = postService.getPost(postId);
+        return ResponseEntity.ok(BaseResponse.of("선택 포스트 조회", HttpStatus.OK.value(), dto));
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<RedirectView> updateFeed(@PathVariable Long postId, @RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        postService.updateFeed(postId, requestDto, userDetails.getUser());
+    public ResponseEntity<RedirectView> updatePost(@PathVariable Long postId, @RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        postService.updatePost(postId, requestDto, userDetails.getUser());
         RedirectView redirectView = new RedirectView("/api/posts/" + postId);
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY.value()).body(redirectView);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<RedirectView> deleteFeed(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        postService.deleteFeed(postId, userDetails.getUser());
+    public ResponseEntity<RedirectView> deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        postService.deletePost(postId, userDetails.getUser());
         RedirectView redirectView = new RedirectView("/api/posts");
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY.value()).body(redirectView);
     }
