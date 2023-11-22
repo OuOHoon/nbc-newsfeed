@@ -5,7 +5,9 @@ import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -15,9 +17,10 @@ public class FeedController {
     private final FeedService feedService;
 
     @PostMapping
-    public ResponseEntity<BaseResponse<FeedResponseDto>> createFeed(@RequestBody FeedRequestDto requestDto, User user){
-        FeedResponseDto dto = feedService.createFeed(requestDto, user);
-        return ResponseEntity.ok(BaseResponse.of("Feed 작성", 201, dto));
+    public ResponseEntity<RedirectView> createFeed(@RequestBody FeedRequestDto requestDto, @AuthenticationPrincipal User user){
+        Long postId = feedService.createFeed(requestDto, user);
+        RedirectView redirectView = new RedirectView("/api/posts/" + postId);
+        return ResponseEntity.status(301).body(redirectView);
     }
 
     @GetMapping
@@ -33,14 +36,16 @@ public class FeedController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<BaseResponse<FeedResponseDto>> updateFeed(@PathVariable Long postId, @RequestBody FeedRequestDto requestDto, User user){
-        FeedResponseDto dto = feedService.updateFeed(postId, requestDto, user);
-        return ResponseEntity.ok(BaseResponse.of("선택 Feed 수정", 201, dto));
+    public ResponseEntity<RedirectView> updateFeed(@PathVariable Long postId, @RequestBody FeedRequestDto requestDto, @AuthenticationPrincipal User user){
+        feedService.updateFeed(postId, requestDto, user);
+        RedirectView redirectView = new RedirectView("/api/posts/" + postId);
+        return ResponseEntity.status(301).body(redirectView);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<BaseResponse<Void>> deleteFeed(@PathVariable Long postId, User user){
+    public ResponseEntity<RedirectView> deleteFeed(@PathVariable Long postId, @AuthenticationPrincipal User user){
         feedService.deleteFeed(postId, user);
-        return ResponseEntity.ok(BaseResponse.of("선택 Feed 삭제", 201, null));
+        RedirectView redirectView = new RedirectView("/api/posts");
+        return ResponseEntity.status(301).body(redirectView);
     }
 }

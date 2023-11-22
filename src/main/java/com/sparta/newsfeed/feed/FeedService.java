@@ -14,9 +14,9 @@ public class FeedService {
 
     private FeedRepository feedRepository;
 
-    public FeedResponseDto createFeed(FeedRequestDto requestDto, User user) {
+    public Long createFeed(FeedRequestDto requestDto, User user) {
         Feed feed = feedRepository.save(new Feed(requestDto, user));
-        return new FeedResponseDto(feed);
+        return feed.getFeed_id();
     }
 
     public Page<FeedResponseDto> getAllFeeds(@RequestParam("page") int page) {
