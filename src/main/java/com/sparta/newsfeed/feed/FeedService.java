@@ -21,7 +21,7 @@ public class FeedService {
         return feed.getFeed_id();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<FeedResponseDto> getAllFeeds(@RequestParam("page") int page) {
         Sort sort = Sort.by(Sort.Direction.DESC, "CreatedAt");
         Pageable pageable = PageRequest.of(page, 30, sort);
