@@ -15,7 +15,8 @@ public class Feed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long feed_id;
+    @Column(name = "feed_id")
+    private Long id;
 
     @Column(nullable = false)
     private String title;

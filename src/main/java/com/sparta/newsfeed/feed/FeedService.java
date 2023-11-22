@@ -18,7 +18,7 @@ public class FeedService {
 
     public Long createFeed(FeedRequestDto requestDto, User user) {
         Feed feed = feedRepository.save(new Feed(requestDto, user));
-        return feed.getFeed_id();
+        return feed.getId();
     }
 
     @Transactional(readOnly = true)
