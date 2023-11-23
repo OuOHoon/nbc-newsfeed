@@ -45,7 +45,4 @@ public class Comment {
 		this.text = dto.getText();
 	}
 
-
-
-
 }

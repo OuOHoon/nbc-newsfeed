@@ -26,43 +26,48 @@ public class CommentService {
 	@Valid
 	@Transactional
 	public CommentResponseDto createComment(CommentRequestDto dto, User user, Post post) {
+
 		Comment comment = new Comment(dto, user, post);
 		Comment savedComment = commentRepository.save(comment);
+
 		return new CommentResponseDto(savedComment);
 	}
 
 	public List<CommentResponseDto> getCommentsByPost(Long postId) {
-		List<Comment> comments = commentRepository.findByPostId(postId);
-		return comments.stream()
-				.map(CommentResponseDto::new)
-				.collect(Collectors.toList());
+
+		List<Comment> comments = commentRepository
+									.findByPostId(postId);
+
+		return comments.stream().map(CommentResponseDto::new)
+						.collect(Collectors.toList());
 	}
 
 
 	@Transactional
-	public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto, User user) {
-		Comment comment = commentRepository.findById(commentId)
-				.orElseThrow(() -> new NotFoundCommentException("해당 댓글이 존재하지 않습니다."));
-		if (!comment.getUser().equals(user)) {
-			throw new NoPrivilegesException("댓글 수정 권한이 없습니다.");
-		}
+	public CommentResponseDto updateComment(Long commentId
+											, CommentRequestDto commentRequestDto
+											, User user) {
 
+		Comment comment = commentRepository.findById(commentId)
+											.orElseThrow(NotFoundCommentException::new);
+		if (!comment.getUser().equals(user)) { throw new NoPrivilegesException(); }
 		comment.update(commentRequestDto);
+
 		return new CommentResponseDto(comment);
 	}
 
 	@Transactional
 	public void deleteComment(Long commentId, User user) {
+
 		Comment comment = commentRepository.findById(commentId)
-				.orElseThrow(() -> new NotFoundCommentException("해당 댓글이 존재하지 않습니다."));
-		if (!comment.getUser().equals(user)) {
-			throw new NoPrivilegesException("댓글 삭제 권한이 없습니다.");
-		}
+											.orElseThrow(NotFoundCommentException::new);
+		if (!comment.getUser().equals(user)) { throw new NoPrivilegesException(); }
 		commentRepository.delete(comment);
 	}
 
 	public Post findPostById(Long postId) {
+
 		return postRepository.findById(postId)
-				.orElseThrow(() -> new NotFoundPostException("게시글이 존재하지 않습니다."));
+				.orElseThrow(NotFoundPostException::new);
 	}
 }

@@ -1,7 +1,10 @@
 package com.sparta.newsfeed.comment.exception;
 
 public class NotFoundPostException  extends RuntimeException {
-	public NotFoundPostException (String message) {
-		super(message);
+	private static final String MESSAGE = "게시글이 존재하지 않습니다.";
+
+	public NotFoundPostException() {
+		super(MESSAGE);
 	}
+
 }
