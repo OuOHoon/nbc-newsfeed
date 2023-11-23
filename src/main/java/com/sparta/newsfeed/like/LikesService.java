@@ -7,8 +7,6 @@ import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class LikesService {
@@ -16,22 +14,17 @@ public class LikesService {
     private final LikesRepository likesRepository;
     private final PostRepository postRepository;
 
-    public Boolean likePost(Long postId, User user) {
-        Optional<Likes> like = likesRepository.findByPostIdAndUserId(postId, user.getId());
-
-        if(like.isEmpty()){
-            Post post = findPost(postId);
-            checkUser(post, user);
-            likesRepository.save(new Likes(post, user));
-            return true;
-        } else{
-            likesRepository.delete(like.get());
-            return false;
-        }
+    public Integer likePost(Long postId, User user) {
+        Post post = findPost(postId);
+        checkUser(post, user);
+        likesRepository.save(new Likes(post, user));
+        return post.getLikesCount();
     }
 
-    public int countLikes(Long postId) {
+    public Integer unlikePost(Long postId, User user) {
         Post post = findPost(postId);
+        Likes like = likesRepository.findByPostIdAndUserId(postId, user.getId());
+        likesRepository.delete(like);
         return post.getLikesCount();
     }
 
