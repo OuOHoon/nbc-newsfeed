@@ -27,9 +27,9 @@ public class CommentController {
 	@PostMapping
 	public ResponseEntity<BaseResponse<CommentResponseDto>> postComment(@Valid @RequestBody CommentRequestDto commentRequestDto
 																		,@AuthenticationPrincipal UserDetailsImpl user
-																		, @PathVariable("postId") Long postId) {
+																		,@PathVariable("postId") Long postId) {
 
-		Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습네다."));
+		Post post = commentService.findPostById(postId);
 		CommentResponseDto dto = commentService.createComment(commentRequestDto, user.getUser(), post);
 		return new ResponseEntity<>(BaseResponse.of("댓글 작성", HttpStatus.OK.value(), dto), HttpStatus.CREATED);
 	}

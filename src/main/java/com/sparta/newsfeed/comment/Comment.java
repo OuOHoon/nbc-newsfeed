@@ -6,7 +6,7 @@ import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 
 import java.time.ZonedDateTime;
@@ -14,12 +14,11 @@ import java.time.ZonedDateTime;
 @Entity
 @NoArgsConstructor
 @Getter
-@Setter
 public class Comment {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "comment_id")
-	private Long comment_id;
+	private Long id;
 
 	@Column
 	private String text;
@@ -45,4 +44,8 @@ public class Comment {
 	public void update(CommentRequestDto dto) {
 		this.text = dto.getText();
 	}
+
+
+
+
 }

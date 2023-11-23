@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
 public class CommentResponseDto {
 
     private Long post;
-    private Long user;
+    private Long user_id;
     private String text;
 
     private Long comment_id;
@@ -20,10 +20,10 @@ public class CommentResponseDto {
 
 
     public CommentResponseDto(Comment comment) {
-        this.comment_id = comment.getComment_id();
+        this.comment_id = comment.getId();
         this.post = comment.getPost().getId();
         this.text = comment.getText();
         this.date = comment.getDate();
-        this.user = comment.getUser().getId();
+        this.user_id = comment.getUser().getId();
     }
 }

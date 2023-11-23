@@ -2,9 +2,13 @@ package com.sparta.newsfeed.comment;
 
 import com.sparta.newsfeed.comment.dto.CommentRequestDto;
 import com.sparta.newsfeed.comment.dto.CommentResponseDto;
+import com.sparta.newsfeed.comment.exception.NoPrivilegesException;
+import com.sparta.newsfeed.comment.exception.NotFoundCommentException;
+import com.sparta.newsfeed.comment.exception.NotFoundPostException;
 import com.sparta.newsfeed.post.Post;
+import com.sparta.newsfeed.post.PostRepository;
 import com.sparta.newsfeed.user.User;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +21,9 @@ import java.util.stream.Collectors;
 public class CommentService {
 
 	private final CommentRepository commentRepository;
+	private final PostRepository postRepository;
 
+	@Valid
 	@Transactional
 	public CommentResponseDto createComment(CommentRequestDto dto, User user, Post post) {
 		Comment comment = new Comment(dto, user, post);
@@ -36,9 +42,9 @@ public class CommentService {
 	@Transactional
 	public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto, User user) {
 		Comment comment = commentRepository.findById(commentId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+				.orElseThrow(() -> new NotFoundCommentException("해당 댓글이 존재하지 않습니다."));
 		if (!comment.getUser().equals(user)) {
-			throw new IllegalStateException("댓글 수정 권한이 없습니다.");
+			throw new NoPrivilegesException("댓글 수정 권한이 없습니다.");
 		}
 
 		comment.update(commentRequestDto);
@@ -48,10 +54,15 @@ public class CommentService {
 	@Transactional
 	public void deleteComment(Long commentId, User user) {
 		Comment comment = commentRepository.findById(commentId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+				.orElseThrow(() -> new NotFoundCommentException("해당 댓글이 존재하지 않습니다."));
 		if (!comment.getUser().equals(user)) {
-			throw new EntityNotFoundException("댓글 삭제 권한이 없습니다.");
+			throw new NoPrivilegesException("댓글 삭제 권한이 없습니다.");
 		}
 		commentRepository.delete(comment);
+	}
+
+	public Post findPostById(Long postId) {
+		return postRepository.findById(postId)
+				.orElseThrow(() -> new NotFoundPostException("게시글이 존재하지 않습니다."));
 	}
 }
