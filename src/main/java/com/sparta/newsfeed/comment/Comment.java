@@ -1,12 +1,14 @@
 package com.sparta.newsfeed.comment;
 
 import com.sparta.newsfeed.comment.dto.CommentRequestDto;
-import com.sparta.newsfeed.feed.Feed;
+import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+
 import java.time.ZonedDateTime;
 
 @Entity
@@ -27,16 +29,20 @@ public class Comment {
 	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "feed_id")
-	private Feed feed;
+	@JoinColumn(name = "post_id")
+	private Post post;
 
 	@Column
 	private ZonedDateTime date;
 
-	public Comment(CommentRequestDto dto, User user, Feed feed) {
+	public Comment(CommentRequestDto dto, User user, Post post) {
 		this.text = dto.getText();
 		this.date = ZonedDateTime.now();
 		this.user = user;
-		this.feed = feed;
+		this.post = post;
+	}
+
+	public void update(CommentRequestDto dto) {
+		this.text = dto.getText();
 	}
 }
