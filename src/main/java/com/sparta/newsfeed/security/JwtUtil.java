@@ -68,14 +68,14 @@ public class JwtUtil {
 
     //토큰 생성
     //forLogin가 false라면 로그아웃을 위한 토큰으로 만료시간이 0인 토큰을 제작
-    public String createToken(String username, boolean forExpire ) {
+    public String createToken(String username, boolean forLogin ) {
         Date date = new Date();
-        Long tokenTime = forExpire ? TOKEN_TIME : 0;
+        Long tokenTime = forLogin ? TOKEN_TIME : 0;
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) //만료시간 설정
+                        .setExpiration(new Date(date.getTime() + tokenTime)) //만료시간 설정
                         .setIssuedAt(date) //발급일
                         .signWith(key, signatureAlgorithm)//암호화
                         .compact();

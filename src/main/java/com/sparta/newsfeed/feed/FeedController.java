@@ -1,7 +1,7 @@
 package com.sparta.newsfeed.feed;
 
 import com.sparta.newsfeed.common.BaseResponse;
-import com.sparta.newsfeed.user.UserDetailsImpl;
+import com.sparta.newsfeed.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
