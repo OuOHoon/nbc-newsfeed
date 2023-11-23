@@ -1,7 +1,9 @@
 package com.sparta.newsfeed.like;
 
+import com.sparta.newsfeed.common.exception.NotFoundPostException;
 import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.post.PostRepository;
+import com.sparta.newsfeed.post.exception.SelfLikeException;
 import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,14 +37,12 @@ public class LikesService {
     }
 
     private Post findPost(Long id) {
-        return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 포스트는 존재하지 않습니다.")
-        );
+        return postRepository.findById(id).orElseThrow(NotFoundPostException::new);
     }
 
     private void checkUser(Post post, User user) {
         if (post.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("본인이 작성한 글에 좋아요 할 수 없습니다.");
+            throw new SelfLikeException();
         }
     }
 }

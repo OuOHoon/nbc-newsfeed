@@ -1,6 +1,8 @@
 package com.sparta.newsfeed.post;
 
+import com.sparta.newsfeed.common.exception.NotFoundPostException;
 import com.sparta.newsfeed.like.LikesRepository;
+import com.sparta.newsfeed.post.exception.OnlyAuthorAccessException;
 import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,14 +53,12 @@ public class PostService {
     }
 
     private Post findPost(Long id) {
-        return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 포스트는 존재하지 않습니다.")
-        );
+        return postRepository.findById(id).orElseThrow(NotFoundPostException::new);
     }
 
     private void checkUser(Post post, User user) {
         if (!post.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("작성자만 수정/삭제 가능합니다.");
+            throw new OnlyAuthorAccessException();
         }
     }
 }
