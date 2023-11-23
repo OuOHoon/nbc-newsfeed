@@ -30,7 +30,8 @@ public class LikesService {
     }
 
     public int countLikes(Long postId) {
-        return likesRepository.countByPostId(postId);
+        Post post = findPost(postId);
+        return post.getLikesCount();
     }
 
     private Post findPost(Long id) {

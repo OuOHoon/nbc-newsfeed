@@ -27,9 +27,6 @@ public class Post {
     private String contents;
 
     @Column
-    private Integer likesCount;
-
-    @Column
     private LocalDateTime createdAt;
 
     @ManyToOne
