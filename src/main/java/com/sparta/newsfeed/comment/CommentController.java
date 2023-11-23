@@ -34,12 +34,6 @@ public class CommentController {
 		return new ResponseEntity<>(BaseResponse.of("댓글 작성", HttpStatus.OK.value(), dto), HttpStatus.CREATED);
 	}
 
-	//	@GetMapping("/{commentId}")
-//	public ResponseEntity<BaseResponse<CommentResponseDto>> findCommentsByPost(@PathVariable("postId") Long postId) {
-//		CommentResponseDto dto = commentService.getComment(postId);
-//		return ResponseEntity.ok(BaseResponse.of("post의 comments 조회", HttpStatus.OK.value(), dto));
-//	}
-
 	@GetMapping
 	public ResponseEntity<BaseResponse<List<CommentResponseDto>>> getAllCommentsByPost(@PathVariable("postId") Long postId) {
 		List<CommentResponseDto> dtos = commentService.getCommentsByPost(postId);

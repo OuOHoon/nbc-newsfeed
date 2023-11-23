@@ -17,20 +17,13 @@ import java.util.stream.Collectors;
 public class CommentService {
 
 	private final CommentRepository commentRepository;
-	// C
+
 	@Transactional
 	public CommentResponseDto createComment(CommentRequestDto dto, User user, Post post) {
 		Comment comment = new Comment(dto, user, post);
 		Comment savedComment = commentRepository.save(comment);
 		return new CommentResponseDto(savedComment);
 	}
-
-	// R
-//	public CommentResponseDto getComment(Long commentId) {
-//		Comment comment = commentRepository.findById(commentId)
-//				.orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
-//		return new CommentResponseDto(comment);
-//	}
 
 	public List<CommentResponseDto> getCommentsByPost(Long postId) {
 		List<Comment> comments = commentRepository.findByPostId(postId);
@@ -39,7 +32,7 @@ public class CommentService {
 				.collect(Collectors.toList());
 	}
 
-	// U
+
 	@Transactional
 	public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto, User user) {
 		Comment comment = commentRepository.findById(commentId)
@@ -51,7 +44,7 @@ public class CommentService {
 		comment.update(commentRequestDto);
 		return new CommentResponseDto(comment);
 	}
-	// D
+
 	@Transactional
 	public void deleteComment(Long commentId, User user) {
 		Comment comment = commentRepository.findById(commentId)
