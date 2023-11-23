@@ -3,7 +3,6 @@ package com.sparta.newsfeed.like;
 import com.sparta.newsfeed.common.exception.NotFoundPostException;
 import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.post.PostRepository;
-import com.sparta.newsfeed.post.exception.SelfLikeException;
 import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

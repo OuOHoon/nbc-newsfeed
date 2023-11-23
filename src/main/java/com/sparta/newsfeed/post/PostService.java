@@ -2,7 +2,6 @@ package com.sparta.newsfeed.post;
 
 import com.sparta.newsfeed.common.exception.NotFoundPostException;
 import com.sparta.newsfeed.like.LikesRepository;
-import com.sparta.newsfeed.post.exception.OnlyAuthorAccessException;
 import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

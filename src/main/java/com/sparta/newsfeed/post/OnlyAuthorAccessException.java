@@ -1,4 +1,4 @@
-package com.sparta.newsfeed.post.exception;
+package com.sparta.newsfeed.post;
 
 public class OnlyAuthorAccessException extends IllegalArgumentException {
 
