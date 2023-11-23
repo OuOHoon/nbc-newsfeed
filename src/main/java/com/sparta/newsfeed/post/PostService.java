@@ -1,5 +1,6 @@
 package com.sparta.newsfeed.post;
 
+import com.sparta.newsfeed.like.LikesRepository;
 import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final LikesRepository likesRepository;
 
     public Long createPost(PostRequestDto requestDto, User user) {
         Post post = postRepository.save(new Post(requestDto, user));
@@ -50,7 +52,7 @@ public class PostService {
 
     private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 피드는 존재하지 않습니다.")
+                new IllegalArgumentException("해당 포스트는 존재하지 않습니다.")
         );
     }
 
