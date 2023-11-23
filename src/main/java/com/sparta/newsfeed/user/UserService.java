@@ -1,10 +1,14 @@
 package com.sparta.newsfeed.user;
 
+import com.sparta.newsfeed.common.exception.NotFoundUserException;
+import com.sparta.newsfeed.security.UserDetailsImpl;
+import com.sparta.newsfeed.user.dto.ChangePasswordRequestDto;
 import com.sparta.newsfeed.user.dto.LoginRequestDto;
 import com.sparta.newsfeed.user.dto.SignupRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +23,7 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         if(userRepository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 유저입니다.");
+            throw new ExistingUserException();
         }
 
         User user = new User(username, password);
@@ -31,10 +35,31 @@ public class UserService {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("등록된 유저가 없습니다."));
+        User user = userRepository.findByUsername(username).orElseThrow(NotFoundUserException::new);
 
         if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new WrongPasswordException();
         }
+    }
+
+    //비밀번호 변경
+    @Transactional
+    public void changePassword(ChangePasswordRequestDto requestDto, UserDetailsImpl userDetails) {
+
+        User user = userRepository.findById(userDetails.getUser().getId())
+                .orElseThrow(NotFoundUserException::new);
+        String newPassword = passwordEncoder.encode(requestDto.getNewpassword());
+
+        //비밀번호 재입력 오류
+        if(!passwordEncoder.matches(requestDto.getExistingpassword(), user.getPassword())) {
+            throw new WrongPasswordException();
+        }
+
+        //기존 비밀번호와 새로운 비밀번호가 같은 경우
+        if(requestDto.getExistingpassword().equals(requestDto.getNewpassword())) {
+            throw new SamePasswordException();
+        }
+
+        user.setPassword(newPassword);
     }
 }
