@@ -42,7 +42,7 @@ public class UserController {
 
     //로그아웃
     @PostMapping("/logout")
-    public ResponseEntity<BaseResponse<Void>> logout(HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<BaseResponse<Void>> logout(HttpServletResponse response) {
         //만료기한이 0 인 토큰 발급
         response.setHeader("Authorization", jwtUtil.createToken(null, false));
         return ResponseEntity.ok().body(BaseResponse.of("로그아웃 성공", HttpStatus.OK.value(), null));
