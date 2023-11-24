@@ -8,4 +8,5 @@ import java.util.Optional;
 @Repository
 public interface LikesRepository extends JpaRepository<Likes, Long> {
     Likes findByPostIdAndUserId(Long postId, Long userId);
+    Likes findByCommentIdAndUserId(Long commentId, Long userId);
 }

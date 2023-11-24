@@ -70,9 +70,4 @@ public class GlobalExceptionController {
     public ResponseEntity<String> handleNotFoundCommentException(NotFoundCommentException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
-
-    @ExceptionHandler(NotFoundPostException.class)
-    public ResponseEntity<String> handleNotFoundPostException(NotFoundPostException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
 }

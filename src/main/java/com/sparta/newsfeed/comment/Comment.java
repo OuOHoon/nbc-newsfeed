@@ -1,6 +1,7 @@
 package com.sparta.newsfeed.comment;
 
 import com.sparta.newsfeed.comment.dto.CommentRequestDto;
+import com.sparta.newsfeed.like.Likes;
 import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -31,6 +33,9 @@ public class Comment {
 	@JoinColumn(name = "post_id")
 	private Post post;
 
+	@OneToMany(mappedBy = "comment")
+	private List<Likes> likesList;
+
 	@Column
 	private ZonedDateTime date;
 
@@ -45,4 +50,7 @@ public class Comment {
 		this.text = dto.getText();
 	}
 
+	public Integer countLikes() {
+		return likesList.size();
+	}
 }

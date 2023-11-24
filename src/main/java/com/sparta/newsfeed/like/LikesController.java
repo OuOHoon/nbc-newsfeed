@@ -28,4 +28,20 @@ public class LikesController {
         LikesResponseDto dto = (new LikesResponseDto(likesService.unlikePost(postId, userDetails.getUser())));
         return ResponseEntity.ok(BaseResponse.of("좋아요가 취소 되었습니다.", HttpStatus.OK.value(), dto));
     }
+
+    @PostMapping("/comments/{commentId}/likes")
+    public ResponseEntity<BaseResponse<LikesResponseDto>> likeComment(@PathVariable Long postId,
+                                                                   @PathVariable Long commentId,
+                                                                   @AuthenticationPrincipal UserDetailsImpl userDetails){
+        LikesResponseDto dto = (new LikesResponseDto(likesService.likeComment(commentId, userDetails.getUser())));
+        return ResponseEntity.ok(BaseResponse.of("좋아요가 완료 되었습니다.", HttpStatus.OK.value(), dto));
+    }
+
+    @DeleteMapping("/comments/{commentId}/likes")
+    public ResponseEntity<BaseResponse<LikesResponseDto>> unlikeComment(@PathVariable Long postId,
+                                                                      @PathVariable Long commentId,
+                                                                      @AuthenticationPrincipal UserDetailsImpl userDetails){
+        LikesResponseDto dto = (new LikesResponseDto(likesService.unlikeComment(commentId, userDetails.getUser())));
+        return ResponseEntity.ok(BaseResponse.of("좋아요가 취소 되었습니다.", HttpStatus.OK.value(), dto));
+    }
 }
