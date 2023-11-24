@@ -25,18 +25,27 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
     @OneToOne(mappedBy = "user")
     private Profile profile;
 
     @OneToMany(mappedBy = "user")
     private List<Likes> likesList;
 
-    public User(String username, String password) {
+    public User(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRole(UserRoleEnum role) {
+        this.role = role;
     }
 }
