@@ -39,6 +39,9 @@ public class Comment {
 	@Column
 	private ZonedDateTime date;
 
+	@Column
+	private Integer likesCount;
+
 	public Comment(CommentRequestDto dto, User user, Post post) {
 		this.text = dto.getText();
 		this.date = ZonedDateTime.now();
@@ -51,6 +54,7 @@ public class Comment {
 	}
 
 	public Integer countLikes() {
-		return likesList.size();
+		this.likesCount = likesList.size();
+		return this.likesCount;
 	}
 }

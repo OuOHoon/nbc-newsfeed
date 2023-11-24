@@ -40,11 +40,15 @@ public class Post {
     @Column
     private double weight;
 
+    @Column
+    private Integer likesCount;
+
     public Post(PostRequestDto dto, User user){
         this.title = dto.getTitle();
         this.contents = dto.getContents();
         this.user = user;
         this.createdAt = LocalDateTime.now();
+        this.likesCount = 0;
     }
 
     public void update(PostRequestDto requestDto) {
@@ -53,7 +57,8 @@ public class Post {
     }
 
     public int countLikes(){
-        return likesList.size();
+        this.likesCount = likesList.size();
+        return this.likesCount;
     }
 
     public void setWeight(double weight){

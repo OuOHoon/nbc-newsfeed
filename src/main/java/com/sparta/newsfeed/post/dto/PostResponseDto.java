@@ -22,7 +22,7 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.contents = post.getContents();
         this.username = post.getUser().getProfile().getNickname();
-        this.likesCount = post.countLikes();
+        this.likesCount = post.getLikesCount();
         this.createdAt = post.getCreatedAt();
     }
 }

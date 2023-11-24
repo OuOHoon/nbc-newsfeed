@@ -22,6 +22,6 @@ public class CommentResponseDto {
         this.text = comment.getText();
         this.date = comment.getDate();
         this.userName = comment.getUser().getProfile().getNickname();
-        this.likesCount = comment.countLikes();
+        this.likesCount = comment.getLikesCount();
     }
 }

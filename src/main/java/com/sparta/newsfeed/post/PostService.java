@@ -82,8 +82,10 @@ public class PostService {
     public void calculateWeightForGuests(){
         // 게스트 유저 피드 정렬 기준 가중치 = 좋아요(0.8) + 작성일(0.2)
 
+        double maxLikes = postRepository.findTopByOrderByLikesCountDesc().getLikesCount();
+
         for(Post post : postRepository.findAll()) {
-            double likeScore = LIKE * post.countLikes() * 2;
+            double likeScore = post.getLikesCount() / maxLikes * LIKE * 2;
 
             LocalDateTime now = LocalDateTime.now();
             long daysBetween = ChronoUnit.DAYS.between(post.getCreatedAt(), now);
@@ -97,13 +99,15 @@ public class PostService {
     public void calculateWeightForUser(User user){
         // 로그인 유저 피드 정렬 기준 가중치 = 팔로우(0.5) + 좋아요(0.4) + 작성일(0.1)
 
+        double maxLikes = postRepository.findTopByOrderByLikesCountDesc().getLikesCount();
+
         for(Post post : postRepository.findAll()) {
             double followScore = 0;
             if(followRepository.findByUserIdAndFollowUserId(user.getId(), post.getUser().getId()).isPresent()) {
                 followScore = FOLLOW;
             }
 
-            double likeScore = LIKE * post.countLikes();
+            double likeScore = post.getLikesCount() / maxLikes * LIKE;
 
             LocalDateTime now = LocalDateTime.now();
             long daysBetween = ChronoUnit.DAYS.between(post.getCreatedAt(), now);
