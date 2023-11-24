@@ -2,11 +2,11 @@ package com.sparta.newsfeed.post;
 
 import com.sparta.newsfeed.common.exception.post.NotFoundPostException;
 import com.sparta.newsfeed.common.exception.post.OnlyAuthorAccessException;
-import com.sparta.newsfeed.like.LikesRepository;
 import com.sparta.newsfeed.post.dto.PostRequestDto;
 import com.sparta.newsfeed.post.dto.PostResponseDto;
 import com.sparta.newsfeed.security.UserDetailsImpl;
 import com.sparta.newsfeed.user.User;
+import com.sparta.newsfeed.user.follow.FollowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final LikesRepository likesRepository;
+    private final FollowRepository followRepository;
 
     private static final double FOLLOW = 0.5;
     private static final double LIKE = 0.4;
@@ -94,9 +94,9 @@ public class PostService {
 
         for(Post post : postRepository.findAll()) {
             double followScore = 0;
-//            if(user.getFollowingFollows().contains(post.getUser().getId())) {
-//                followScore = FOLLOW;
-//            }
+            if(followRepository.findByUserIdAndFollowUserId(user.getId(), post.getUser().getId()).isPresent()) {
+                followScore = FOLLOW;
+            }
 
             double likeScore = LIKE * post.countLikes();
 

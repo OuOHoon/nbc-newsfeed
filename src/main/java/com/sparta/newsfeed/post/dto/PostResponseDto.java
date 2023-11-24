@@ -13,7 +13,7 @@ public class PostResponseDto {
     private Long id;
     private String title;
     private String contents;
-//    private String username;
+    private String username;
     private int likesCount;
     private LocalDateTime createdAt;
 
@@ -21,7 +21,7 @@ public class PostResponseDto {
         this.id = post.getId();
         this.title = post.getTitle();
         this.contents = post.getContents();
- //       this.username = post.getUser().getProfile().getNickname();
+        this.username = post.getUser().getProfile().getNickname();
         this.likesCount = post.countLikes();
         this.createdAt = post.getCreatedAt();
     }
