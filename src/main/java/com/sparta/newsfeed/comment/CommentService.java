@@ -73,7 +73,7 @@ public class CommentService {
 
 	private void checkUser(Comment comment, User user) {
 		if (!comment.getUser().getId().equals(user.getId())) {
-			throw new NotFoundPostException();
+			throw new NoPrivilegesException();
 		}
 	}
 
