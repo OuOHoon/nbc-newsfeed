@@ -38,7 +38,7 @@ public class PostService {
         return post.getId();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Page<PostResponseDto> getAllPosts(@RequestParam("page") int page,
                                              @RequestParam("size") int size,
                                              UserDetailsImpl userDetails) {
@@ -78,7 +78,8 @@ public class PostService {
         }
     }
 
-    private void calculateWeightForGuests(){
+    @Transactional
+    public void calculateWeightForGuests(){
         // 게스트 유저 피드 정렬 기준 가중치 = 좋아요(0.8) + 작성일(0.2)
 
         for(Post post : postRepository.findAll()) {
@@ -92,7 +93,8 @@ public class PostService {
         }
     }
 
-    private void calculateWeightForUser(User user){
+    @Transactional
+    public void calculateWeightForUser(User user){
         // 로그인 유저 피드 정렬 기준 가중치 = 팔로우(0.5) + 좋아요(0.4) + 작성일(0.1)
 
         for(Post post : postRepository.findAll()) {

@@ -37,6 +37,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Likes> likesList;
 
+    @Column
     private double weight;
 
     public Post(PostRequestDto dto, User user){
