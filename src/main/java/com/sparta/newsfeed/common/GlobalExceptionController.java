@@ -1,5 +1,7 @@
 package com.sparta.newsfeed.common;
 
+import com.sparta.newsfeed.common.exception.comment.NoPrivilegesException;
+import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
 import com.sparta.newsfeed.common.exception.user.*;
 import com.sparta.newsfeed.common.exception.post.*;
 import com.sparta.newsfeed.common.exception.like.SelfLikeException;
@@ -57,5 +59,20 @@ public class GlobalExceptionController {
     public ResponseEntity<BaseResponse<Void>> samePasswordException(SamePasswordException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
                 HttpStatus.BAD_REQUEST.value(), null));
+    }
+
+    @ExceptionHandler(NoPrivilegesException.class)
+    public ResponseEntity<String> handleNoPrivilegesException(NoPrivilegesException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundCommentException.class)
+    public ResponseEntity<String> handleNotFoundCommentException(NotFoundCommentException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundPostException.class)
+    public ResponseEntity<String> handleNotFoundPostException(NotFoundPostException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }
