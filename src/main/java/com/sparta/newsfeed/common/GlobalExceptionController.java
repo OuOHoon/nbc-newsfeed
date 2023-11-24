@@ -2,7 +2,7 @@ package com.sparta.newsfeed.common;
 
 import com.sparta.newsfeed.common.exception.InvalidUserException;
 import com.sparta.newsfeed.common.exception.NotFoundUserException;
-import com.sparta.newsfeed.user.*;
+import com.sparta.newsfeed.user.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +43,18 @@ public class GlobalExceptionController {
 
     @ExceptionHandler(SamePasswordException.class)
     public ResponseEntity<BaseResponse<Void>> samePasswordException(SamePasswordException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), null));
+    }
+
+    @ExceptionHandler(WrongAuthCodeException.class)
+    public ResponseEntity<BaseResponse<Void>> wrongAuthCodeException(WrongAuthCodeException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), null));
+    }
+
+    @ExceptionHandler(ExpiredAuthCodeException.class)
+    public ResponseEntity<BaseResponse<Void>> expiredAuthCodeException(ExpiredAuthCodeException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
                 HttpStatus.BAD_REQUEST.value(), null));
     }
