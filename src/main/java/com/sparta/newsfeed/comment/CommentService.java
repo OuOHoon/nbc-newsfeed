@@ -36,20 +36,20 @@ public class CommentService {
 	public List<CommentResponseDto> getCommentsByPost(Long postId) {
 
 		List<Comment> comments = commentRepository
-									.findByPostId(postId);
+				.findByPostId(postId);
 
 		return comments.stream().map(CommentResponseDto::new)
-						.collect(Collectors.toList());
+				.collect(Collectors.toList());
 	}
 
 
 	@Transactional
 	public CommentResponseDto updateComment(Long commentId
-											, CommentRequestDto commentRequestDto
-											, User user) {
+			, CommentRequestDto commentRequestDto
+			, User user) {
 
 		Comment comment = commentRepository.findById(commentId)
-											.orElseThrow(NotFoundCommentException::new);
+				.orElseThrow(NotFoundCommentException::new);
 		checkUser(comment, user);
 		comment.update(commentRequestDto);
 
@@ -60,7 +60,7 @@ public class CommentService {
 	public void deleteComment(Long commentId, User user) {
 
 		Comment comment = commentRepository.findById(commentId)
-											.orElseThrow(NotFoundCommentException::new);
+				.orElseThrow(NotFoundCommentException::new);
 		checkUser(comment, user);
 		commentRepository.delete(comment);
 	}

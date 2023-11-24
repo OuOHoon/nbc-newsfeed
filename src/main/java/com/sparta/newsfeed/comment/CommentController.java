@@ -24,15 +24,15 @@ public class CommentController {
 
 	@PostMapping
 	public ResponseEntity<BaseResponse<CommentResponseDto>> postComment(@Valid @RequestBody CommentRequestDto commentRequestDto
-																		,@AuthenticationPrincipal UserDetailsImpl user
-																		,@PathVariable("postId") Long postId) {
+			,@AuthenticationPrincipal UserDetailsImpl user
+			,@PathVariable("postId") Long postId) {
 
 		Post post = commentService.findPostById(postId);
 		CommentResponseDto dto = commentService.createComment(commentRequestDto, user.getUser(), post);
 
 		return new ResponseEntity<>(BaseResponse.of("댓글 작성"
-														, HttpStatus.OK.value()
-														, dto), HttpStatus.CREATED);
+				, HttpStatus.OK.value()
+				, dto), HttpStatus.CREATED);
 	}
 
 	@GetMapping
@@ -41,29 +41,29 @@ public class CommentController {
 		List<CommentResponseDto> dtos = commentService.getCommentsByPost(postId);
 
 		return ResponseEntity.ok(BaseResponse.of("모든 댓글 조회"
-														, HttpStatus.OK.value(), dtos));
+				, HttpStatus.OK.value(), dtos));
 	}
 
 	@PutMapping("/{commentId}")
 	public ResponseEntity<BaseResponse<CommentResponseDto>> putComment(@PathVariable Long commentId
-																		, @RequestBody CommentRequestDto commentRequestDto
-																		,@AuthenticationPrincipal UserDetailsImpl user) {
+			, @RequestBody CommentRequestDto commentRequestDto
+			,@AuthenticationPrincipal UserDetailsImpl user) {
 
 		CommentResponseDto dto = commentService.updateComment(commentId, commentRequestDto, user.getUser());
 
 		return ResponseEntity.ok(BaseResponse.of("댓글 수정"
-														, HttpStatus.OK.value(), dto));
+				, HttpStatus.OK.value(), dto));
 	}
 
 
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<BaseResponse<String>> deleteComment(@PathVariable Long commentId
-																, @AuthenticationPrincipal UserDetailsImpl user) {
+			, @AuthenticationPrincipal UserDetailsImpl user) {
 
 		commentService.deleteComment(commentId, user.getUser());
 
 		return ResponseEntity.ok(BaseResponse.of("댓글 삭제"
-														, HttpStatus.OK.value(), "댓글이 삭제되었습니다."));
+				, HttpStatus.OK.value(), "댓글이 삭제되었습니다."));
 	}
 
 
