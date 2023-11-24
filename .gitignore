@@ -211,5 +211,5 @@ gradle-app.setting
 application.yml
 application.properties
 application-secret.properties
-src/main/resources/application.properties
+
 

@@ -2,9 +2,9 @@ package com.sparta.newsfeed.comment;
 
 import com.sparta.newsfeed.comment.dto.CommentRequestDto;
 import com.sparta.newsfeed.comment.dto.CommentResponseDto;
-import com.sparta.newsfeed.comment.exception.NoPrivilegesException;
-import com.sparta.newsfeed.comment.exception.NotFoundCommentException;
-import com.sparta.newsfeed.comment.exception.NotFoundPostException;
+import com.sparta.newsfeed.common.exception.comment.NoPrivilegesException;
+import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
+import com.sparta.newsfeed.common.exception.comment.NotFoundPostException;
 import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.post.PostRepository;
 import com.sparta.newsfeed.user.User;
@@ -32,7 +32,7 @@ public class CommentService {
 
 		return new CommentResponseDto(savedComment);
 	}
-
+	
 	public List<CommentResponseDto> getCommentsByPost(Long postId) {
 
 		List<Comment> comments = commentRepository
@@ -41,7 +41,6 @@ public class CommentService {
 		return comments.stream().map(CommentResponseDto::new)
 				.collect(Collectors.toList());
 	}
-
 
 	@Transactional
 	public CommentResponseDto updateComment(Long commentId

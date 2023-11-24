@@ -1,4 +1,4 @@
-package com.sparta.newsfeed.comment.exception;
+package com.sparta.newsfeed.common.exception.comment;
 
 public class NoPrivilegesException extends RuntimeException {
 

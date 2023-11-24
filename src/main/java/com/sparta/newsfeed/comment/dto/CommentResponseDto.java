@@ -20,6 +20,6 @@ public class CommentResponseDto {
         this.comment_id = comment.getId();
         this.text = comment.getText();
         this.date = comment.getDate();
-        this.userName = comment.getUser().getUsername();
+        this.userName = comment.getUser().getProfile().getNickname();
     }
 }

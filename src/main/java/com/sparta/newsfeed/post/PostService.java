@@ -1,6 +1,7 @@
 package com.sparta.newsfeed.post;
 
-import com.sparta.newsfeed.common.exception.NotFoundPostException;
+import com.sparta.newsfeed.common.exception.post.OnlyAuthorAccessException;
+import com.sparta.newsfeed.common.exception.post.NotFoundPostException;
 import com.sparta.newsfeed.like.LikesRepository;
 import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
