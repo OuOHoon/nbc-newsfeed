@@ -1,4 +1,4 @@
-package com.sparta.newsfeed.post;
+package com.sparta.newsfeed.feed;
 
 import com.sparta.newsfeed.common.BaseResponse;
 import com.sparta.newsfeed.security.UserDetailsImpl;
