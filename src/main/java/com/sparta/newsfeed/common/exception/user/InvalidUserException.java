@@ -1,4 +1,4 @@
-package com.sparta.newsfeed.common.exception;
+package com.sparta.newsfeed.common.exception.user;
 
 public class InvalidUserException extends RuntimeException {
     private static final String MESSAGE = "유효한 유저가 아닙니다.";

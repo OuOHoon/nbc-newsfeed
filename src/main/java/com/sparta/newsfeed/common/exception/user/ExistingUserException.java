@@ -1,4 +1,4 @@
-package com.sparta.newsfeed.user;
+package com.sparta.newsfeed.common.exception.user;
 
 public class ExistingUserException extends IllegalArgumentException{
 
