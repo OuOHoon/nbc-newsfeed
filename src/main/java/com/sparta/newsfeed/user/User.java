@@ -2,10 +2,12 @@ package com.sparta.newsfeed.user;
 
 import com.sparta.newsfeed.like.Likes;
 import com.sparta.newsfeed.profile.Profile;
+import com.sparta.newsfeed.user.follow.Follow;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +29,12 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     private Profile profile;
+
+    @OneToMany(mappedBy = "user")
+    private List<Follow> followingFollows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "followUser")
+    private List<Follow> followerFollows = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Likes> likesList;
