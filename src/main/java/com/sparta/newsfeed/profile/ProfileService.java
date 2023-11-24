@@ -1,9 +1,9 @@
 package com.sparta.newsfeed.profile;
 
+import com.sparta.newsfeed.common.exception.user.InvalidUserException;
+import com.sparta.newsfeed.common.exception.user.NotFoundUserException;
 import com.sparta.newsfeed.profile.dto.ProfileRequestDto;
 import com.sparta.newsfeed.profile.dto.ProfileResponseDto;
-import com.sparta.newsfeed.common.exception.InvalidUserException;
-import com.sparta.newsfeed.common.exception.NotFoundUserException;
 import com.sparta.newsfeed.user.User;
 import com.sparta.newsfeed.user.UserRepository;
 import lombok.RequiredArgsConstructor;
