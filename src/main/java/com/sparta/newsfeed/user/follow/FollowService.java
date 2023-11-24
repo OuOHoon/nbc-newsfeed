@@ -23,10 +23,8 @@ public class FollowService {
 
     private final FollowRepository followRepository;
 
-
     @Transactional
     public void follow(Long followUserId, User user) {
-        userRepository.save(user);
         User followingUser = userRepository.findById(followUserId).orElseThrow(NotFoundUserException::new);
         Optional<Follow> optionalFollow = followRepository
                 .findByUserIdAndFollowUserId(user.getId(), followingUser.getId());

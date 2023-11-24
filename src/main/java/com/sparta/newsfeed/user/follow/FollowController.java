@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,9 +17,8 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping
-    @Transactional
     public ResponseEntity<BaseResponse<Void>> follow(@PathVariable Long userId,
-                                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         followService.follow(userId, userDetails.getUser());
         return new ResponseEntity<>(BaseResponse.of("팔로우 추가", HttpStatus.CREATED.value(), null),
                 HttpStatus.CREATED);
