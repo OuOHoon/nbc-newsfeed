@@ -1,6 +1,7 @@
 package com.sparta.newsfeed.like;
 
-import com.sparta.newsfeed.common.exception.NotFoundPostException;
+import com.sparta.newsfeed.common.exception.like.SelfLikeException;
+import com.sparta.newsfeed.common.exception.post.NotFoundPostException;
 import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.post.PostRepository;
 import com.sparta.newsfeed.user.User;
@@ -18,14 +19,14 @@ public class LikesService {
         Post post = findPost(postId);
         checkUser(post, user);
         likesRepository.save(new Likes(post, user));
-        return post.getLikesCount();
+        return post.countLikes();
     }
 
     public Integer unlikePost(Long postId, User user) {
         Post post = findPost(postId);
         Likes like = likesRepository.findByPostIdAndUserId(postId, user.getId());
         likesRepository.delete(like);
-        return post.getLikesCount();
+        return post.countLikes();
     }
 
     private Post findPost(Long id) {

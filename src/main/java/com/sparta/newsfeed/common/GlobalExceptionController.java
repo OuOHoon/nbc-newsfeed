@@ -1,11 +1,8 @@
 package com.sparta.newsfeed.common;
 
-import com.sparta.newsfeed.common.exception.InvalidUserException;
-import com.sparta.newsfeed.common.exception.NotFoundPostException;
-import com.sparta.newsfeed.common.exception.NotFoundUserException;
-import com.sparta.newsfeed.post.OnlyAuthorAccessException;
-import com.sparta.newsfeed.like.SelfLikeException;
-import com.sparta.newsfeed.user.*;
+import com.sparta.newsfeed.common.exception.user.*;
+import com.sparta.newsfeed.common.exception.post.*;
+import com.sparta.newsfeed.common.exception.like.SelfLikeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

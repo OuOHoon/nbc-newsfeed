@@ -1,6 +1,8 @@
 package com.sparta.newsfeed.post;
 
 import com.sparta.newsfeed.common.BaseResponse;
+import com.sparta.newsfeed.post.dto.PostRequestDto;
+import com.sparta.newsfeed.post.dto.PostResponseDto;
 import com.sparta.newsfeed.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +29,10 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<BaseResponse<Page<PostResponseDto>>> getAllPosts(@RequestParam("page") int page){
-        Page<PostResponseDto> postList = postService.getAllPosts(page);
+    public ResponseEntity<BaseResponse<Page<PostResponseDto>>> getAllPosts(@RequestParam("page") int page,
+                                                                           @RequestParam("size") int size,
+                                                                           @AuthenticationPrincipal UserDetailsImpl userDetails){
+        Page<PostResponseDto> postList = postService.getAllPosts(page - 1, size, userDetails);
         return ResponseEntity.ok(BaseResponse.of("뉴스피드 페이지", HttpStatus.OK.value(), postList));
     }
 
