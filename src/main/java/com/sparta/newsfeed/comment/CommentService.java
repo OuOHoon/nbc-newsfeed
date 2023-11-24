@@ -50,7 +50,7 @@ public class CommentService {
 
 		Comment comment = commentRepository.findById(commentId)
 											.orElseThrow(NotFoundCommentException::new);
-		if (!comment.getUser().equals(user)) { throw new NoPrivilegesException(); }
+		checkUser(comment, user);
 		comment.update(commentRequestDto);
 
 		return new CommentResponseDto(comment);
@@ -61,7 +61,7 @@ public class CommentService {
 
 		Comment comment = commentRepository.findById(commentId)
 											.orElseThrow(NotFoundCommentException::new);
-		if (!comment.getUser().equals(user)) { throw new NoPrivilegesException(); }
+		checkUser(comment, user);
 		commentRepository.delete(comment);
 	}
 
@@ -70,4 +70,11 @@ public class CommentService {
 		return postRepository.findById(postId)
 				.orElseThrow(NotFoundPostException::new);
 	}
+
+	private void checkUser(Comment comment, User user) {
+		if (!comment.getUser().getId().equals(user.getId())) {
+			throw new NotFoundPostException();
+		}
+	}
+
 }

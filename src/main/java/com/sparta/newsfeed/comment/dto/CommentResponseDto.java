@@ -13,7 +13,6 @@ public class CommentResponseDto {
 
     private String userName;
     private String text;
-
     private Long comment_id;
     private ZonedDateTime date;
 
