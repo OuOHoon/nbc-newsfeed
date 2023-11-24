@@ -1,10 +1,12 @@
 package com.sparta.newsfeed.user;
 
+import com.sparta.newsfeed.like.Likes;
 import com.sparta.newsfeed.profile.Profile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -13,7 +15,7 @@ import lombok.Setter;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -25,6 +27,9 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     private Profile profile;
+
+    @OneToMany(mappedBy = "user")
+    private List<Likes> likesList;
 
     public User(String username, String password) {
         this.username = username;
