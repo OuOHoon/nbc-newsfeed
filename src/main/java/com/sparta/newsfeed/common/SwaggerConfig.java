@@ -14,7 +14,7 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         Info info = new Info()
                 .version("v1.0.0")
-                .title("New Feed 프로젝트 테스트");
+                .title("News Feed 프로젝트 테스트");
 
         String jwt = "JWT";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt);
