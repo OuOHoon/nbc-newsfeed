@@ -5,6 +5,7 @@
 - 프로젝트
     - 프로젝트 명 : nbc - newsfeed
     - 프로젝트 소개 : 취준생을 위한 newsfeed 백엔드 구현
+    - 팀 노션 : https://www.notion.so/Spring-10-199014ebfd59434883ed2cadeb5311ac
 
 
 ## Wire Frame
