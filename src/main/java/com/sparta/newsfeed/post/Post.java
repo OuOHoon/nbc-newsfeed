@@ -56,9 +56,12 @@ public class Post {
         this.contents = requestDto.getContents();
     }
 
-    public int countLikes(){
-        this.likesCount = likesList.size();
-        return this.likesCount;
+    public int increaseCount(){
+        return ++likesCount;
+    }
+
+    public int decreaseCount(){
+        return ++likesCount;
     }
 
     public void setWeight(double weight){

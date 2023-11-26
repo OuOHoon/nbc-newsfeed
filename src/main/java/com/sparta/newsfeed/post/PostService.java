@@ -41,11 +41,11 @@ public class PostService {
                                              @RequestParam("size") int size,
                                              UserDetailsImpl userDetails) {
 
-        // 유저 조회인 경우
-        if (userDetails.getUser().getRole().equals(UserRoleEnum.USER)) {
-            calculateWeightForUser(userDetails.getUser());
-        } else { // 게스트 조회인 경우
+        // 게스트 조회인 경우
+        if (userDetails == null || userDetails.getUser().getRole().equals(UserRoleEnum.GUEST)) {
             calculateWeightForGuests();
+        } else { // 유저 조회인 경우
+            calculateWeightForUser(userDetails.getUser());
         }
         Sort sort = Sort.by(Sort.Direction.DESC, "weight");
         Pageable pageable = PageRequest.of(page, size, sort);

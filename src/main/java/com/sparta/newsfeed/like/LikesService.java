@@ -21,8 +21,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LikesService {
 
-    private final postLikesRepository postLikesRepository;
-    private final commentLikesRepository commentLikesRepository;
+    private final PostLikesRepository postLikesRepository;
+    private final CommentLikesRepository commentLikesRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
@@ -33,7 +33,7 @@ public class LikesService {
         checkUser(post, user);
         isAlreadyLikePost(user, postId);
         postLikesRepository.save(new PostLikes(post, user));
-        return post.countLikes();
+        return post.increaseCount();
     }
 
     @Transactional
@@ -42,7 +42,7 @@ public class LikesService {
         PostLikes like = postLikesRepository.findByPostIdAndUserId(postId, user.getId())
                 .orElseThrow(NotFoundLikeException::new);
         postLikesRepository.delete(like);
-        return post.countLikes();
+        return post.decreaseCount();
     }
 
     @Transactional
@@ -51,7 +51,7 @@ public class LikesService {
         checkUser(comment, user);
         isAlreadyLikeComment(user, commentId);
         commentLikesRepository.save(new CommentLikes(comment, user));
-        return comment.countLikes();
+        return comment.increaseCount();
     }
 
     @Transactional
@@ -60,7 +60,7 @@ public class LikesService {
         CommentLikes like = commentLikesRepository.findByCommentIdAndUserId(commentId, user.getId())
                 .orElseThrow(NotFoundLikeException::new);
         commentLikesRepository.delete(like);
-        return comment.countLikes();
+        return comment.decreaseCount();
     }
 
     private Post findPost(Long id) {
