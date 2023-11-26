@@ -10,6 +10,7 @@ import com.sparta.newsfeed.post.PostRepository;
 import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,8 @@ public class LikesService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
+
+    @Transactional
     public Integer likePost(Long postId, User user) {
         Post post = findPost(postId);
         checkUser(post, user);
@@ -26,6 +29,7 @@ public class LikesService {
         return post.countLikes();
     }
 
+    @Transactional
     public Integer unlikePost(Long postId, User user) {
         Post post = findPost(postId);
         Likes like = likesRepository.findByPostIdAndUserId(postId, user.getId());
@@ -33,6 +37,7 @@ public class LikesService {
         return post.countLikes();
     }
 
+    @Transactional
     public Integer likeComment(Long commentId, User user) {
         Comment comment = findComment(commentId);
         checkUser(comment, user);
@@ -40,6 +45,7 @@ public class LikesService {
         return comment.countLikes();
     }
 
+    @Transactional
     public Integer unlikeComment(Long commentId, User user) {
         Comment comment = findComment(commentId);
         Likes like = likesRepository.findByCommentIdAndUserId(commentId, user.getId());
