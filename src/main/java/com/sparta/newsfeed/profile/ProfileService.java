@@ -7,6 +7,7 @@ import com.sparta.newsfeed.common.exception.user.NotFoundUserException;
 import com.sparta.newsfeed.user.User;
 import com.sparta.newsfeed.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,17 @@ public class ProfileService {
 
     public ProfileResponseDto findProfile(Long userId) {
         return toResponseDto(profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new));
+    }
+
+    public ProfileResponseDto createProfile(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        Profile profile = Profile.builder()
+                .nickname(RandomStringUtils.random(10, true, true))
+                .introduction("")
+                .build();
+        profile.setUser(user);
+        profileRepository.save(profile);
+        return toResponseDto(profile);
     }
 
     public ProfileResponseDto createProfile(Long userId, ProfileRequestDto request) {
