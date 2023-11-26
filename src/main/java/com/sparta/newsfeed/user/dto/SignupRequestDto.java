@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class SignupRequestDto {
 
-    @Schema(name = "email", example = "abcdegf@gmail.com", required = true)
+    @Schema(name = "username", example = "abcdegf@gmail.com", required = true)
     @Pattern(regexp = "^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$", message = "올바르지 않은 이메일 형식입니다.")
     //이메일 형식만 가능
     private String username;

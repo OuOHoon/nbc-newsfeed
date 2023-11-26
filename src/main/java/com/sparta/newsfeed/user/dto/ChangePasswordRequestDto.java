@@ -12,12 +12,12 @@ import lombok.Setter;
 public class ChangePasswordRequestDto {
 
     @NotBlank
-    @Schema(name = "existing password", example = "sk1fmfbkv", required = true)
+    @Schema(name = "existingpassword", example = "sk1fmfbkv", required = true)
     @Pattern(regexp = "^[A-Za-z0-9]{8,15}$", message = "올바르지 않은 비밀번호 형식입니다.")
     private String existingpassword;
 
     @NotBlank
-    @Schema(name = "new password", example = "sk2fmfbkv", required = true)
+    @Schema(name = "newpassword", example = "sk2fmfbkv", required = true)
     @Pattern(regexp = "^[A-Za-z0-9]{8,15}$", message = "올바르지 않은 비밀번호 형식입니다.")
     private String newpassword;
 

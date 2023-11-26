@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class MailAuthRequestDto {
 
-    @Schema(name = "auth code", example = "351632", required = true)
+    @Schema(name = "authcode", example = "351632", required = true)
     @Pattern(regexp = "/[0-9]{6}$/", message = "인증번호는 6자리 숫자입니다.")
     private int authcode;
 
