@@ -1,6 +1,7 @@
 package com.sparta.newsfeed.post;
 
-import com.sparta.newsfeed.like.Likes;
+import com.sparta.newsfeed.like.postLikes;
+import com.sparta.newsfeed.post.dto.PostRequestDto;
 import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,13 +35,20 @@ public class Post {
     private User user;
 
     @OneToMany(mappedBy = "post")
-    private List<Likes> likesList;
+    private List<postLikes> likesList;
+
+    @Column
+    private double weight;
+
+    @Column
+    private Integer likesCount;
 
     public Post(PostRequestDto dto, User user){
         this.title = dto.getTitle();
         this.contents = dto.getContents();
         this.user = user;
         this.createdAt = LocalDateTime.now();
+        this.likesCount = 0;
     }
 
     public void update(PostRequestDto requestDto) {
@@ -48,7 +56,12 @@ public class Post {
         this.contents = requestDto.getContents();
     }
 
-    public int getLikesCount(){
-        return likesList.size();
+    public int countLikes(){
+        this.likesCount = likesList.size();
+        return this.likesCount;
+    }
+
+    public void setWeight(double weight){
+        this.weight = weight;
     }
 }

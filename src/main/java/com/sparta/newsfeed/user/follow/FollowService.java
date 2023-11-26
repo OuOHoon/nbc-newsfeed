@@ -1,6 +1,6 @@
 package com.sparta.newsfeed.user.follow;
 
-import com.sparta.newsfeed.common.exception.NotFoundUserException;
+import com.sparta.newsfeed.common.exception.user.NotFoundUserException;
 import com.sparta.newsfeed.user.User;
 import com.sparta.newsfeed.user.UserRepository;
 import com.sparta.newsfeed.user.follow.dto.FollowResponseDto;
