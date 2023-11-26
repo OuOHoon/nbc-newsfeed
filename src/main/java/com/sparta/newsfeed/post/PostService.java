@@ -84,6 +84,10 @@ public class PostService {
 
         double maxLikes = postRepository.findTopByOrderByLikesCountDesc().orElseThrow(NotFoundPostException::new)
                 .getLikesCount();
+        //좋아요가 한개도 없는 경우
+        if(maxLikes == 0) {
+            maxLikes = 1;
+        }
 
         for (Post post : postRepository.findAll()) {
             double likeScore = post.getLikesCount() / maxLikes * LIKE * 2;
@@ -102,6 +106,10 @@ public class PostService {
 
         double maxLikes = postRepository.findTopByOrderByLikesCountDesc().orElseThrow(NotFoundPostException::new)
                 .getLikesCount();
+        //좋아요가 한개도 없는 경우
+        if(maxLikes == 0) {
+            maxLikes = 1;
+        }
 
         for (Post post : postRepository.findAll()) {
             double followScore = 0;
