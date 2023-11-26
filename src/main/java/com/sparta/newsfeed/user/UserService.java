@@ -1,6 +1,9 @@
 package com.sparta.newsfeed.user;
 
-import com.sparta.newsfeed.common.exception.NotFoundUserException;
+import com.sparta.newsfeed.common.exception.user.ExistingUserException;
+import com.sparta.newsfeed.common.exception.user.NotFoundUserException;
+import com.sparta.newsfeed.common.exception.user.SamePasswordException;
+import com.sparta.newsfeed.common.exception.user.WrongPasswordException;
 import com.sparta.newsfeed.security.UserDetailsImpl;
 import com.sparta.newsfeed.user.dto.ChangePasswordRequestDto;
 import com.sparta.newsfeed.user.dto.LoginRequestDto;

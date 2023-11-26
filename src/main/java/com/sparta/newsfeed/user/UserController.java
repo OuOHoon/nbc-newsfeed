@@ -1,7 +1,7 @@
 package com.sparta.newsfeed.user;
 
 import com.sparta.newsfeed.common.BaseResponse;
-import com.sparta.newsfeed.common.exception.NotFoundUserException;
+
 import com.sparta.newsfeed.security.JwtUtil;
 import com.sparta.newsfeed.security.UserDetailsImpl;
 import com.sparta.newsfeed.user.dto.*;

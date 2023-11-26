@@ -1,11 +1,13 @@
 package com.sparta.newsfeed.user;
 
-import com.sparta.newsfeed.like.Likes;
+import com.sparta.newsfeed.like.postLikes;
 import com.sparta.newsfeed.profile.Profile;
+import com.sparta.newsfeed.user.follow.Follow;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,7 +35,13 @@ public class User {
     private Profile profile;
 
     @OneToMany(mappedBy = "user")
-    private List<Likes> likesList;
+    private List<Follow> followingFollows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "followUser")
+    private List<Follow> followerFollows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<postLikes> postLikesList;
 
     public User(String username, String password, UserRoleEnum role) {
         this.username = username;

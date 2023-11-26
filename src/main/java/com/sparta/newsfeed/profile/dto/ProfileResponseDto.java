@@ -11,4 +11,5 @@ public class ProfileResponseDto {
 
     private String nickname;
     private String introduction;
+    private String profileImageUrl;
 }
