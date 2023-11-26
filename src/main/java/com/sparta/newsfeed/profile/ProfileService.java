@@ -92,10 +92,6 @@ public class ProfileService {
     }
 
     public String getProfileImage(Long userId, User user) {
-        // 프로필 수정 요청한 유저랑 대상 유저랑 같은지 체크.. 반복되는 유효성 검증 aop로 뺄까?
-        if (!user.getId().equals(userId)) {
-            throw new InvalidUserException();
-        }
         Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
         return profile.getImageUrl();
     }
