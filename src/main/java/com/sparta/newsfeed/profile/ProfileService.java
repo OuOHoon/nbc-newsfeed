@@ -8,6 +8,7 @@ import com.sparta.newsfeed.profile.dto.ProfileResponseDto;
 import com.sparta.newsfeed.user.User;
 import com.sparta.newsfeed.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
@@ -84,11 +86,15 @@ public class ProfileService {
 
     @Transactional
     public void deleteProfileImage(Long userId, User user) {
-        // 프로필 수정 요청한 유저랑 대상 유저랑 같은지 체크.. 반복되는 유효성 검증 aop로 뺄까?
         if (!user.getId().equals(userId)) {
             throw new InvalidUserException();
         }
         Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
+        String filename = userId.toString() + "." + profile.getImageUrl()
+                .substring(profile.getImageUrl().lastIndexOf(".") + 1);
+        log.info("filename: {}", filename);
+        s3Uploader.deleteProfileImage(filename);
+        profile.setImageUrl(null);
     }
 
     public static ProfileResponseDto toResponseDto(Profile profile) {
