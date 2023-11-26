@@ -4,9 +4,11 @@ package com.sparta.newsfeed.common;
 import com.sparta.newsfeed.common.exception.comment.NoPrivilegesException;
 import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
 import com.sparta.newsfeed.common.exception.comment.NotFoundPostException;
-import com.sparta.newsfeed.common.exception.user.*;
-import com.sparta.newsfeed.common.exception.post.*;
 import com.sparta.newsfeed.common.exception.like.SelfLikeException;
+import com.sparta.newsfeed.common.exception.post.OnlyAuthorAccessException;
+import com.sparta.newsfeed.common.exception.user.*;
+import com.sparta.newsfeed.user.exception.ExpiredAuthCodeException;
+import com.sparta.newsfeed.user.exception.WrongAuthCodeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -74,6 +76,7 @@ public class GlobalExceptionController {
     public ResponseEntity<BaseResponse<Void>> expiredAuthCodeException(ExpiredAuthCodeException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
                 HttpStatus.BAD_REQUEST.value(), null));
+    }
 
     @ExceptionHandler(NoPrivilegesException.class)
     public ResponseEntity<String> handleNoPrivilegesException(NoPrivilegesException e) {
