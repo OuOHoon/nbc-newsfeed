@@ -33,7 +33,7 @@ public class ProfileService {
     }
 
     public ProfileResponseDto createProfile(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        User user = userRepository.findById(userId).orElseThrow(NotFoundProfileException::new);
         Profile profile = Profile.builder()
                 .nickname(RandomStringUtils.random(10, true, true)) // 중복 가능성 매우 낮으므로 무시
                 .introduction("")
@@ -44,7 +44,7 @@ public class ProfileService {
     }
 
     public ProfileResponseDto createProfile(Long userId, ProfileRequestDto request) {
-        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        User user = userRepository.findById(userId).orElseThrow(NotFoundProfileException::new);
         Optional<Profile> optionalProfile = profileRepository.findByNickname(request.getNickname());
         // 닉네임 중복 체크
         if (optionalProfile.isPresent()) {
