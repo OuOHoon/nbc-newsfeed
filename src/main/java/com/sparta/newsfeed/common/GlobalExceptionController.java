@@ -20,62 +20,62 @@ public class GlobalExceptionController {
     @ExceptionHandler(NotFoundUserException.class)
     public ResponseEntity<BaseResponse<Void>> notFoundUserException(NotFoundUserException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(InvalidUserException.class)
     public ResponseEntity<BaseResponse<Void>> invalidUserException(InvalidUserException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(NotFoundPostException.class)
     public ResponseEntity<BaseResponse<Void>> invalidUserException(NotFoundPostException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(OnlyAuthorAccessException.class)
     public ResponseEntity<BaseResponse<Void>> invalidUserException(OnlyAuthorAccessException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(SelfLikeException.class)
     public ResponseEntity<BaseResponse<Void>> invalidUserException(SelfLikeException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(ExistingUserException.class)
     public ResponseEntity<BaseResponse<Void>> existingUserException(ExistingUserException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(WrongPasswordException.class)
     public ResponseEntity<BaseResponse<Void>> wrongPasswordException(WrongPasswordException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(SamePasswordException.class)
     public ResponseEntity<BaseResponse<Void>> samePasswordException(SamePasswordException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
 
     @ExceptionHandler(WrongAuthCodeException.class)
     public ResponseEntity<BaseResponse<Void>> wrongAuthCodeException(WrongAuthCodeException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(ExpiredAuthCodeException.class)
     public ResponseEntity<BaseResponse<Void>> expiredAuthCodeException(ExpiredAuthCodeException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null));
+                false, null));
     }
 
     @ExceptionHandler(NoPrivilegesException.class)

@@ -43,13 +43,13 @@ public class PostController {
                                                                            @RequestParam("size") int size,
                                                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
         Page<PostResponseDto> postList = postService.getAllPosts(page - 1, size, userDetails);
-        return ResponseEntity.ok(BaseResponse.of("뉴스피드 페이지", HttpStatus.OK.value(), postList));
+        return ResponseEntity.ok(BaseResponse.of("뉴스피드 페이지", true, postList));
     }
 
     @GetMapping("/{postId}")
     public ResponseEntity<BaseResponse<PostResponseDto>> getPost(@PathVariable Long postId){
         PostResponseDto dto = postService.getPost(postId);
-        return ResponseEntity.ok(BaseResponse.of("선택 포스트 조회", HttpStatus.OK.value(), dto));
+        return ResponseEntity.ok(BaseResponse.of("선택 포스트 조회", true, dto));
     }
 
     @PutMapping("/{postId}")

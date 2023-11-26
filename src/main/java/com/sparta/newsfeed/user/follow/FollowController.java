@@ -20,20 +20,20 @@ public class FollowController {
     public ResponseEntity<BaseResponse<Void>> follow(@PathVariable Long userId,
                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
         followService.follow(userId, userDetails.getUser());
-        return new ResponseEntity<>(BaseResponse.of("팔로우 추가", HttpStatus.CREATED.value(), null),
+        return new ResponseEntity<>(BaseResponse.of("팔로우 추가", true, null),
                 HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<BaseResponse<FollowResponseDto>> getFollows(@PathVariable Long userId) {
         FollowResponseDto follows = followService.getFollows(userId);
-        return ResponseEntity.ok(BaseResponse.of("팔로우 조회", HttpStatus.OK.value(),follows));
+        return ResponseEntity.ok(BaseResponse.of("팔로우 조회", true, follows));
     }
 
     @DeleteMapping
     public ResponseEntity<BaseResponse<Void>> unfollow(@PathVariable Long userId,
-                                                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         followService.unfollow(userId, userDetails.getUser());
-        return ResponseEntity.ok(BaseResponse.of("팔로우 삭제", HttpStatus.OK.value(), null));
+        return ResponseEntity.ok(BaseResponse.of("팔로우 삭제", true, null));
     }
 }
