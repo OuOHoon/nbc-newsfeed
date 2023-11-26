@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
@@ -58,17 +60,42 @@ public class ProfileService {
     }
 
     @Transactional
-    public String uploadProfileImage(Long userId, User user, MultipartFile image) {
+    public String uploadProfileImage(Long userId, User user, MultipartFile image) throws IOException {
         Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
+
+        // 프로필 수정 요청한 유저랑 대상 유저랑 같은지 체크
         if (!user.getId().equals(userId)) {
             throw new InvalidUserException();
         }
+
+        String uploadUrl = s3Uploader.uploadProfileImage(userId.toString(), image);
+        profile.setImageUrl(uploadUrl);
+        return uploadUrl;
+    }
+
+    public String getProfileImage(Long userId, User user) {
+        // 프로필 수정 요청한 유저랑 대상 유저랑 같은지 체크.. 반복되는 유효성 검증 aop로 뺄까?
+        if (!user.getId().equals(userId)) {
+            throw new InvalidUserException();
+        }
+        Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
+        return profile.getImageUrl();
+    }
+
+    @Transactional
+    public void deleteProfileImage(Long userId, User user) {
+        // 프로필 수정 요청한 유저랑 대상 유저랑 같은지 체크.. 반복되는 유효성 검증 aop로 뺄까?
+        if (!user.getId().equals(userId)) {
+            throw new InvalidUserException();
+        }
+        Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
     }
 
     public static ProfileResponseDto toResponseDto(Profile profile) {
         return ProfileResponseDto.builder()
                 .nickname(profile.getNickname())
                 .introduction(profile.getIntroduction())
+                .profileImageUrl(profile.getImageUrl())
                 .build();
     }
 }
