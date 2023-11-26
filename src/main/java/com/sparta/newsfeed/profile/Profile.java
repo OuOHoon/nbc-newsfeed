@@ -25,6 +25,8 @@ public class Profile {
     @Column(length = 255)
     private String introduction;
 
+    private String imageUrl;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -36,5 +38,8 @@ public class Profile {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -1,6 +1,7 @@
 package com.sparta.newsfeed.like;
 
-import com.sparta.newsfeed.common.exception.NotFoundPostException;
+import com.sparta.newsfeed.common.exception.like.SelfLikeException;
+import com.sparta.newsfeed.common.exception.post.NotFoundPostException;
 import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.post.PostRepository;
 import com.sparta.newsfeed.user.User;
