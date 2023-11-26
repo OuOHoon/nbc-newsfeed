@@ -1,6 +1,7 @@
 package com.sparta.newsfeed.post;
 
 import com.sparta.newsfeed.common.BaseResponse;
+import com.sparta.newsfeed.common.exception.post.NotFoundPostException;
 import com.sparta.newsfeed.post.dto.PostRequestDto;
 import com.sparta.newsfeed.post.dto.PostResponseDto;
 import com.sparta.newsfeed.security.UserDetailsImpl;
@@ -9,6 +10,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,13 +57,36 @@ public class PostController {
         return ResponseEntity.ok(BaseResponse.of("뉴스피드 페이지", true, postList));
     }
 
-    @GetMapping("/{postId}")
     @Operation(summary = "포스트 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "선택 포스트 조회"),
+            @ApiResponse(responseCode = "4XX", description = "에러 메세지",
+                    content = @Content(
+                            schema = @Schema(implementation = BaseResponse.class),
+                            examples = @ExampleObject(
+                                    name = "ResponseEntity<BaseResponse<Void>>",
+                                    value = "{\"success\": false, \"message\": \"에러 메세지\", \"payload\": null}"
+                            )
+                    ))
+    })
+    @GetMapping("/{postId}")
     public ResponseEntity<BaseResponse<PostResponseDto>> getPost(@PathVariable Long postId){
         PostResponseDto dto = postService.getPost(postId);
         return ResponseEntity.ok(BaseResponse.of("선택 포스트 조회", true, dto));
     }
 
+    @Operation(summary = "포스트 수정")
+    @ApiResponses({
+            @ApiResponse(responseCode = "301", description = "수정된 포스트 url로 새로고침", headers = {@Header(name = "location", description = "/api/posts/{postId}")}),
+            @ApiResponse(responseCode = "4XX", description = "에러 메세지",
+                    content = @Content(
+                            schema = @Schema(implementation = BaseResponse.class),
+                            examples = @ExampleObject(
+                                    name = "ResponseEntity<BaseResponse<Void>>",
+                                    value = "{\"success\": false, \"message\": \"에러 메세지\", \"payload\": null}"
+                            )
+                    ))
+    })
     @PutMapping("/{postId}")
     public ResponseEntity<RedirectView> updatePost(@PathVariable Long postId,
                                                    @Valid @RequestBody PostRequestDto requestDto,
@@ -69,6 +96,18 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY.value()).body(redirectView);
     }
 
+    @Operation(summary = "포스트 삭제")
+    @ApiResponses({
+            @ApiResponse(responseCode = "301", description = "뉴스피드 페이지로 새로고침", headers = {@Header(name = "location", description = "/api/posts/{postId}")}),
+            @ApiResponse(responseCode = "4XX", description = "에러 메세지",
+                    content = @Content(
+                            schema = @Schema(implementation = BaseResponse.class),
+                            examples = @ExampleObject(
+                                    name = "ResponseEntity<BaseResponse<Void>>",
+                                    value = "{\"success\": false, \"message\": \"에러 메세지\", \"payload\": null}"
+                            )
+                    ))
+    })
     @DeleteMapping("/{postId}")
     public ResponseEntity<RedirectView> deletePost(@PathVariable Long postId,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails){
