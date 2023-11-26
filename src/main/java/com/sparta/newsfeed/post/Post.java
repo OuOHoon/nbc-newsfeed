@@ -1,6 +1,6 @@
 package com.sparta.newsfeed.post;
 
-import com.sparta.newsfeed.like.Likes;
+import com.sparta.newsfeed.like.postLikes;
 import com.sparta.newsfeed.post.dto.PostRequestDto;
 import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
@@ -35,7 +35,7 @@ public class Post {
     private User user;
 
     @OneToMany(mappedBy = "post")
-    private List<Likes> likesList;
+    private List<postLikes> likesList;
 
     @Column
     private double weight;

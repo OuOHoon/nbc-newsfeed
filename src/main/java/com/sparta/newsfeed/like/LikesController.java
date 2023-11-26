@@ -18,14 +18,14 @@ public class LikesController {
     @PostMapping("/likes")
     public ResponseEntity<BaseResponse<LikesResponseDto>> likePost(@PathVariable Long postId,
                                                                    @AuthenticationPrincipal UserDetailsImpl userDetails){
-        LikesResponseDto dto = (new LikesResponseDto(likesService.likePost(postId, userDetails.getUser())));
+        LikesResponseDto dto = new LikesResponseDto(likesService.likePost(postId, userDetails.getUser()));
         return ResponseEntity.ok(BaseResponse.of("좋아요가 완료 되었습니다.", HttpStatus.OK.value(), dto));
     }
 
     @DeleteMapping("/likes")
     public ResponseEntity<BaseResponse<LikesResponseDto>> unlikePost(@PathVariable Long postId,
                                                                    @AuthenticationPrincipal UserDetailsImpl userDetails){
-        LikesResponseDto dto = (new LikesResponseDto(likesService.unlikePost(postId, userDetails.getUser())));
+        LikesResponseDto dto = new LikesResponseDto(likesService.unlikePost(postId, userDetails.getUser()));
         return ResponseEntity.ok(BaseResponse.of("좋아요가 취소 되었습니다.", HttpStatus.OK.value(), dto));
     }
 
@@ -33,7 +33,7 @@ public class LikesController {
     public ResponseEntity<BaseResponse<LikesResponseDto>> likeComment(@PathVariable Long postId,
                                                                    @PathVariable Long commentId,
                                                                    @AuthenticationPrincipal UserDetailsImpl userDetails){
-        LikesResponseDto dto = (new LikesResponseDto(likesService.likeComment(commentId, userDetails.getUser())));
+        LikesResponseDto dto = new LikesResponseDto(likesService.likeComment(commentId, userDetails.getUser()));
         return ResponseEntity.ok(BaseResponse.of("좋아요가 완료 되었습니다.", HttpStatus.OK.value(), dto));
     }
 
@@ -41,7 +41,7 @@ public class LikesController {
     public ResponseEntity<BaseResponse<LikesResponseDto>> unlikeComment(@PathVariable Long postId,
                                                                       @PathVariable Long commentId,
                                                                       @AuthenticationPrincipal UserDetailsImpl userDetails){
-        LikesResponseDto dto = (new LikesResponseDto(likesService.unlikeComment(commentId, userDetails.getUser())));
+        LikesResponseDto dto = new LikesResponseDto(likesService.unlikeComment(commentId, userDetails.getUser()));
         return ResponseEntity.ok(BaseResponse.of("좋아요가 취소 되었습니다.", HttpStatus.OK.value(), dto));
     }
 }

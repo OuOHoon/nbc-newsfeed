@@ -1,6 +1,6 @@
 package com.sparta.newsfeed.user;
 
-import com.sparta.newsfeed.like.Likes;
+import com.sparta.newsfeed.like.postLikes;
 import com.sparta.newsfeed.profile.Profile;
 import com.sparta.newsfeed.user.follow.Follow;
 import jakarta.persistence.*;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -38,7 +37,7 @@ public class User {
     private List<Follow> followerFollows = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Likes> likesList;
+    private List<postLikes> postLikesList;
 
     public User(String username, String password) {
         this.username = username;

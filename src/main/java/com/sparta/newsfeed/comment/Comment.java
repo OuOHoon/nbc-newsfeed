@@ -1,7 +1,8 @@
 package com.sparta.newsfeed.comment;
 
 import com.sparta.newsfeed.comment.dto.CommentRequestDto;
-import com.sparta.newsfeed.like.Likes;
+import com.sparta.newsfeed.like.commentLikes;
+import com.sparta.newsfeed.like.postLikes;
 import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
@@ -34,7 +35,7 @@ public class Comment {
 	private Post post;
 
 	@OneToMany(mappedBy = "comment")
-	private List<Likes> likesList;
+	private List<commentLikes> likesList;
 
 	@Column
 	private ZonedDateTime date;

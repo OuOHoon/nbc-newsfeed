@@ -16,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class LikesService {
 
-    private final LikesRepository likesRepository;
+    private final postLikesRepository postLikesRepository;
+    private final commentLikesRepository commentLikesRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
@@ -25,15 +26,15 @@ public class LikesService {
     public Integer likePost(Long postId, User user) {
         Post post = findPost(postId);
         checkUser(post, user);
-        likesRepository.save(new Likes(post, user));
+        postLikesRepository.save(new postLikes(post, user));
         return post.countLikes();
     }
 
     @Transactional
     public Integer unlikePost(Long postId, User user) {
         Post post = findPost(postId);
-        Likes like = likesRepository.findByPostIdAndUserId(postId, user.getId());
-        likesRepository.delete(like);
+        postLikes like = postLikesRepository.findByPostIdAndUserId(postId, user.getId());
+        postLikesRepository.delete(like);
         return post.countLikes();
     }
 
@@ -41,15 +42,15 @@ public class LikesService {
     public Integer likeComment(Long commentId, User user) {
         Comment comment = findComment(commentId);
         checkUser(comment, user);
-        likesRepository.save(new Likes(comment, user));
+        commentLikesRepository.save(new commentLikes(comment, user));
         return comment.countLikes();
     }
 
     @Transactional
     public Integer unlikeComment(Long commentId, User user) {
         Comment comment = findComment(commentId);
-        Likes like = likesRepository.findByCommentIdAndUserId(commentId, user.getId());
-        likesRepository.delete(like);
+        commentLikes like = commentLikesRepository.findByCommentIdAndUserId(commentId, user.getId());
+        commentLikesRepository.delete(like);
         return comment.countLikes();
     }
 
