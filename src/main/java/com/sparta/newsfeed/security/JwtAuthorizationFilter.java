@@ -35,7 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             //유효한 토큰이 아니라면 오류메시지 전달
             if(!jwtUtil.validateToken(tokenValue)) {
 
-                //해당 URI이거나 HTTP Method가 Get이면 유효하지 토큰이라도 요청을 거부하지 않음
+                //해당 URI에서는 유효하지 않은 토큰이라도 요청을 거부하지 않음
                 ArrayList<String> URIList = new ArrayList<>(List.of("/api/users/login", "/api/users/signup"));
                 String URI = request.getRequestURI();
                 if( URIList.contains(URI) || (request.getMethod().equals("GET") && URI.startsWith("/api/posts"))) {
