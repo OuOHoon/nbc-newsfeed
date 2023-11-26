@@ -1,22 +1,23 @@
 package com.sparta.newsfeed.profile;
 
 import com.sparta.newsfeed.common.S3Uploader;
+import com.sparta.newsfeed.common.exception.profile.NotFoundProfileException;
+import com.sparta.newsfeed.common.exception.profile.SameNicknameException;
 import com.sparta.newsfeed.common.exception.user.InvalidUserException;
 import com.sparta.newsfeed.common.exception.user.NotFoundUserException;
 import com.sparta.newsfeed.profile.dto.ProfileRequestDto;
 import com.sparta.newsfeed.profile.dto.ProfileResponseDto;
-import lombok.extern.slf4j.Slf4j;
-import com.sparta.newsfeed.common.exception.user.InvalidUserException;
-import com.sparta.newsfeed.common.exception.user.NotFoundUserException;
 import com.sparta.newsfeed.user.User;
 import com.sparta.newsfeed.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class ProfileService {
     public ProfileResponseDto createProfile(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
         Profile profile = Profile.builder()
-                .nickname(RandomStringUtils.random(10, true, true))
+                .nickname(RandomStringUtils.random(10, true, true)) // 중복 가능성 매우 낮으므로 무시
                 .introduction("")
                 .build();
         profile.setUser(user);
@@ -44,6 +45,11 @@ public class ProfileService {
 
     public ProfileResponseDto createProfile(Long userId, ProfileRequestDto request) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        Optional<Profile> optionalProfile = profileRepository.findByNickname(request.getNickname());
+        // 닉네임 중복 체크
+        if (optionalProfile.isPresent()) {
+            throw new SameNicknameException();
+        }
         Profile profile = Profile.builder()
                 .nickname(request.getNickname())
                 .introduction(request.getIntroduction())
@@ -54,11 +60,19 @@ public class ProfileService {
     }
 
     @Transactional
-    public ProfileResponseDto updateProfile(Long userId, String username, ProfileRequestDto request) {
-        Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
-        if (!profile.getUser().getUsername().equals(username)) {
+    public ProfileResponseDto updateProfile(Long userId, User user, ProfileRequestDto request) {
+        Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundProfileException::new);
+        Optional<Profile> optionalProfile = profileRepository.findByNickname(request.getNickname());
+
+        // 수정 권한 체크
+        if (!profile.getUser().getId().equals(user.getId())) {
             throw new InvalidUserException();
         }
+        // 닉네임 중복 체크
+        if (optionalProfile.isPresent()) {
+            throw new SameNicknameException();
+        }
+
         profile.update(request.getNickname(), request.getIntroduction());
         return toResponseDto(profile);
     }
@@ -67,7 +81,7 @@ public class ProfileService {
     public String uploadProfileImage(Long userId, User user, MultipartFile image) throws IOException {
         Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
 
-        // 프로필 수정 요청한 유저랑 대상 유저랑 같은지 체크
+        // 수정 권한 체크
         if (!user.getId().equals(userId)) {
             throw new InvalidUserException();
         }

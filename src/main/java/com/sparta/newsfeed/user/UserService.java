@@ -4,6 +4,7 @@ import com.sparta.newsfeed.common.exception.user.ExistingUserException;
 import com.sparta.newsfeed.common.exception.user.NotFoundUserException;
 import com.sparta.newsfeed.common.exception.user.SamePasswordException;
 import com.sparta.newsfeed.common.exception.user.WrongPasswordException;
+import com.sparta.newsfeed.profile.ProfileService;
 import com.sparta.newsfeed.security.UserDetailsImpl;
 import com.sparta.newsfeed.user.dto.ChangePasswordRequestDto;
 import com.sparta.newsfeed.user.dto.LoginRequestDto;
@@ -30,6 +31,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
     private final AuthCodeRepository authCodeRepository;
+    private final ProfileService profileService;
     
     @Value("{$spring.mail.username}")
     private static String senderEmail;
@@ -39,6 +41,7 @@ public class UserService {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
 
+        // 이미 가입한 email 이라면 예외 발생
         if(userRepository.findByUsername(username).isPresent()) {
             throw new ExistingUserException();
         }
@@ -68,6 +71,8 @@ public class UserService {
         //모두 통과 시 Role 변경
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(NotFoundUserException::new);
         user.setRole(UserRoleEnum.USER);
+        // 프로필도 함께 생성
+        profileService.createProfile(user.getId());
     }
 
     //로그인
@@ -75,6 +80,7 @@ public class UserService {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
+        // username으로 찾을 수 없다면 예외 발생
         User user = userRepository.findByUsername(username).orElseThrow(NotFoundUserException::new);
 
         //비밀번호 일치여부 검사
@@ -100,6 +106,7 @@ public class UserService {
     @Transactional
     public void changePassword(ChangePasswordRequestDto requestDto, UserDetailsImpl userDetails) {
 
+        // 유저를 찾을 수 없다면 예외 발생
         User user = userRepository.findById(userDetails.getUser().getId())
                 .orElseThrow(NotFoundUserException::new);
         String newPassword = passwordEncoder.encode(requestDto.getNewpassword());

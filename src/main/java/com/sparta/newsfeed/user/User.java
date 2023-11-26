@@ -1,6 +1,6 @@
 package com.sparta.newsfeed.user;
 
-import com.sparta.newsfeed.like.postLikes;
+import com.sparta.newsfeed.like.PostLikes;
 import com.sparta.newsfeed.profile.Profile;
 import com.sparta.newsfeed.user.follow.Follow;
 import jakarta.persistence.*;
@@ -34,14 +34,14 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Profile profile;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user") // 이 유저 id가 user_id인 follow 관계를 찾음
     private List<Follow> followingFollows = new ArrayList<>();
 
-    @OneToMany(mappedBy = "followUser")
+    @OneToMany(mappedBy = "followUser") // 이 유저 id가 follow_user_id인 follow 관계를 모두 찾음
     private List<Follow> followerFollows = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<postLikes> postLikesList;
+    private List<PostLikes> postLikesList;
 
     public User(String username, String password, UserRoleEnum role) {
         this.username = username;

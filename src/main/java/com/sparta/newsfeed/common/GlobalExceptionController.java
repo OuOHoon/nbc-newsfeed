@@ -3,16 +3,23 @@ package com.sparta.newsfeed.common;
 
 import com.sparta.newsfeed.common.exception.comment.NoPrivilegesException;
 import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
-import com.sparta.newsfeed.common.exception.comment.NotFoundPostException;
+import com.sparta.newsfeed.common.exception.like.AlreadyLikeException;
+import com.sparta.newsfeed.common.exception.like.NotFoundLikeException;
 import com.sparta.newsfeed.common.exception.like.SelfLikeException;
+import com.sparta.newsfeed.common.exception.post.NotFoundPostException;
 import com.sparta.newsfeed.common.exception.post.OnlyAuthorAccessException;
+import com.sparta.newsfeed.common.exception.profile.NotFoundProfileException;
 import com.sparta.newsfeed.common.exception.user.*;
 import com.sparta.newsfeed.user.exception.ExpiredAuthCodeException;
 import com.sparta.newsfeed.user.exception.WrongAuthCodeException;
-import org.springframework.http.HttpStatus;
+import com.sparta.newsfeed.user.follow.exception.NotFoundFollowException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionController {
@@ -79,12 +86,42 @@ public class GlobalExceptionController {
     }
 
     @ExceptionHandler(NoPrivilegesException.class)
-    public ResponseEntity<String> handleNoPrivilegesException(NoPrivilegesException e) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+    public ResponseEntity<BaseResponse<Void>> handleNoPrivilegesException(NoPrivilegesException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), false, null));
     }
 
     @ExceptionHandler(NotFoundCommentException.class)
-    public ResponseEntity<String> handleNotFoundCommentException(NotFoundCommentException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    public ResponseEntity<BaseResponse<Void>> handleNotFoundCommentException(NotFoundCommentException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), false, null));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseResponse<Void>> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
+        String errorMessage = exception.getBindingResult().getAllErrors().stream()
+                .map(ObjectError::getDefaultMessage)
+                .collect(Collectors.joining(" "));
+
+        return ResponseEntity.badRequest()
+                .body(BaseResponse.of(errorMessage, false, null));
+    }
+
+    @ExceptionHandler(NotFoundLikeException.class)
+    public ResponseEntity<BaseResponse<Void>> notFoundLikeException(NotFoundLikeException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), false, null));
+    }
+
+    @ExceptionHandler(NotFoundFollowException.class)
+    public ResponseEntity<BaseResponse<Void>> notFoundFollowException(NotFoundFollowException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), false, null));
+    }
+
+    @ExceptionHandler(NotFoundProfileException.class)
+    public ResponseEntity<BaseResponse<Void>> notFoundProfileException(NotFoundProfileException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), false, null));
+    }
+
+    @ExceptionHandler(AlreadyLikeException.class)
+    public ResponseEntity<BaseResponse<Void>> alreadyLikeException(AlreadyLikeException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), false, null));
     }
 }

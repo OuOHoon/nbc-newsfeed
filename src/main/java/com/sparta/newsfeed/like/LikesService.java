@@ -4,6 +4,8 @@ package com.sparta.newsfeed.like;
 import com.sparta.newsfeed.comment.Comment;
 import com.sparta.newsfeed.comment.CommentRepository;
 import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
+import com.sparta.newsfeed.common.exception.like.AlreadyLikeException;
+import com.sparta.newsfeed.common.exception.like.NotFoundLikeException;
 import com.sparta.newsfeed.common.exception.like.SelfLikeException;
 import com.sparta.newsfeed.common.exception.post.NotFoundPostException;
 import com.sparta.newsfeed.post.Post;
@@ -12,6 +14,8 @@ import com.sparta.newsfeed.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,14 +31,16 @@ public class LikesService {
     public Integer likePost(Long postId, User user) {
         Post post = findPost(postId);
         checkUser(post, user);
-        postLikesRepository.save(new postLikes(post, user));
+        isAlreadyLikePost(user, postId);
+        postLikesRepository.save(new PostLikes(post, user));
         return post.countLikes();
     }
 
     @Transactional
     public Integer unlikePost(Long postId, User user) {
         Post post = findPost(postId);
-        postLikes like = postLikesRepository.findByPostIdAndUserId(postId, user.getId());
+        PostLikes like = postLikesRepository.findByPostIdAndUserId(postId, user.getId())
+                .orElseThrow(NotFoundLikeException::new);
         postLikesRepository.delete(like);
         return post.countLikes();
     }
@@ -43,14 +49,16 @@ public class LikesService {
     public Integer likeComment(Long commentId, User user) {
         Comment comment = findComment(commentId);
         checkUser(comment, user);
-        commentLikesRepository.save(new commentLikes(comment, user));
+        isAlreadyLikeComment(user, commentId);
+        commentLikesRepository.save(new CommentLikes(comment, user));
         return comment.countLikes();
     }
 
     @Transactional
     public Integer unlikeComment(Long commentId, User user) {
         Comment comment = findComment(commentId);
-        commentLikes like = commentLikesRepository.findByCommentIdAndUserId(commentId, user.getId());
+        CommentLikes like = commentLikesRepository.findByCommentIdAndUserId(commentId, user.getId())
+                .orElseThrow(NotFoundLikeException::new);
         commentLikesRepository.delete(like);
         return comment.countLikes();
     }
@@ -72,6 +80,20 @@ public class LikesService {
     private void checkUser(Comment comment, User user){
         if (comment.getUser().getId().equals(user.getId())) {
             throw new SelfLikeException();
+        }
+    }
+
+    private void isAlreadyLikePost(User user, Long postId) {
+        Optional<PostLikes> likes = postLikesRepository.findByPostIdAndUserId(postId, user.getId());
+        if (likes.isPresent()){
+            throw new AlreadyLikeException();
+        }
+    }
+
+    private void isAlreadyLikeComment(User user, Long commentId) {
+        Optional<CommentLikes> likes = commentLikesRepository.findByCommentIdAndUserId(commentId, user.getId());
+        if (likes.isPresent()){
+            throw new AlreadyLikeException();
         }
     }
 }

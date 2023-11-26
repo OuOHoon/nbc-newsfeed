@@ -1,16 +1,16 @@
 package com.sparta.newsfeed.like;
 
-import com.sparta.newsfeed.comment.Comment;
+import com.sparta.newsfeed.post.Post;
 import com.sparta.newsfeed.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "commentLikes")
+@Table(name = "post_likes")
 @Getter
 @NoArgsConstructor
-public class commentLikes {
+public class PostLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
@@ -21,11 +21,11 @@ public class commentLikes {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
-    public commentLikes(Comment comment, User user){
-        this.comment = comment;
+    public PostLikes(Post post, User user){
+        this.post = post;
         this.user = user;
     }
 }

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,8 +37,8 @@ public class ProfileController {
     @PutMapping
     public ResponseEntity<BaseResponse<ProfileResponseDto>> updateProfile(@PathVariable Long userId,
                                                                           @Valid @RequestBody ProfileRequestDto request,
-                                                                          @AuthenticationPrincipal UserDetails userDetails) {
-        ProfileResponseDto dto = profileService.updateProfile(userId, userDetails.getUsername(), request);
+                                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ProfileResponseDto dto = profileService.updateProfile(userId, userDetails.getUser(), request);
         return ResponseEntity.ok(BaseResponse.of("프로필 수정", true, dto));
     }
 

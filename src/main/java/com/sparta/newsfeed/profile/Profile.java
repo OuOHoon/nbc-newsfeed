@@ -19,7 +19,7 @@ public class Profile {
     @Column(name = "profile_id")
     private Long id;
 
-    @Column(length = 255)
+    @Column(length = 255, unique = true)
     private String nickname;
 
     @Column(length = 255)

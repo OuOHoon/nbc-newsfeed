@@ -6,6 +6,7 @@ import com.sparta.newsfeed.post.dto.PostRequestDto;
 import com.sparta.newsfeed.post.dto.PostResponseDto;
 import com.sparta.newsfeed.security.UserDetailsImpl;
 import com.sparta.newsfeed.user.User;
+import com.sparta.newsfeed.user.UserRoleEnum;
 import com.sparta.newsfeed.user.follow.FollowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,10 +40,12 @@ public class PostService {
     public Page<PostResponseDto> getAllPosts(@RequestParam("page") int page,
                                              @RequestParam("size") int size,
                                              UserDetailsImpl userDetails) {
-        if(userDetails == null) {
-            calculateWeightForGuests();
-        } else{
+
+        // 유저 조회인 경우
+        if (userDetails.getUser().getRole().equals(UserRoleEnum.USER)) {
             calculateWeightForUser(userDetails.getUser());
+        } else { // 게스트 조회인 경우
+            calculateWeightForGuests();
         }
         Sort sort = Sort.by(Sort.Direction.DESC, "weight");
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -76,12 +79,13 @@ public class PostService {
     }
 
     @Transactional
-    public void calculateWeightForGuests(){
+    public void calculateWeightForGuests() {
         // 게스트 유저 피드 정렬 기준 가중치 = 좋아요(0.8) + 작성일(0.2)
 
-        double maxLikes = postRepository.findTopByOrderByLikesCountDesc().getLikesCount();
+        double maxLikes = postRepository.findTopByOrderByLikesCountDesc().orElseThrow(NotFoundPostException::new)
+                .getLikesCount();
 
-        for(Post post : postRepository.findAll()) {
+        for (Post post : postRepository.findAll()) {
             double likeScore = post.getLikesCount() / maxLikes * LIKE * 2;
 
             LocalDateTime now = LocalDateTime.now();
@@ -93,14 +97,15 @@ public class PostService {
     }
 
     @Transactional
-    public void calculateWeightForUser(User user){
+    public void calculateWeightForUser(User user) {
         // 로그인 유저 피드 정렬 기준 가중치 = 팔로우(0.5) + 좋아요(0.4) + 작성일(0.1)
 
-        double maxLikes = postRepository.findTopByOrderByLikesCountDesc().getLikesCount();
+        double maxLikes = postRepository.findTopByOrderByLikesCountDesc().orElseThrow(NotFoundPostException::new)
+                .getLikesCount();
 
-        for(Post post : postRepository.findAll()) {
+        for (Post post : postRepository.findAll()) {
             double followScore = 0;
-            if(followRepository.findByUserIdAndFollowUserId(user.getId(), post.getUser().getId()).isPresent()) {
+            if (followRepository.findByUserIdAndFollowUserId(user.getId(), post.getUser().getId()).isPresent()) {
                 followScore = FOLLOW;
             }
 
