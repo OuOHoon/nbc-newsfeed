@@ -2,6 +2,7 @@ package com.sparta.newsfeed.common;
 
 import com.sparta.newsfeed.common.exception.comment.NoPrivilegesException;
 import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
+import com.sparta.newsfeed.common.exception.comment.NotFoundPostException;
 import com.sparta.newsfeed.common.exception.user.*;
 import com.sparta.newsfeed.common.exception.post.*;
 import com.sparta.newsfeed.common.exception.like.SelfLikeException;

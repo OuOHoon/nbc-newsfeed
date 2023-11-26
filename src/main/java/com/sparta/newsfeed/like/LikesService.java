@@ -1,5 +1,6 @@
 package com.sparta.newsfeed.like;
 
+
 import com.sparta.newsfeed.comment.Comment;
 import com.sparta.newsfeed.comment.CommentRepository;
 import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
