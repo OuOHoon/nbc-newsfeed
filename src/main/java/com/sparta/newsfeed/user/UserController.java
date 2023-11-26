@@ -24,10 +24,10 @@ public class UserController {
     //회원가입
     @PostMapping("/signup")
     public ResponseEntity<BaseResponse<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto requestDto, HttpServletResponse response) {
+        // 회원가입 로직 -> user table에 저장하고 Role은 GUEST로 둠.
         userService.signup(requestDto);
-        //인증번호 보낼 때 유저 정보 가져올 수 있게 게스트용 쿠키 전달
-        response.setHeader("Authorization", jwtUtil.createToken(requestDto.getUsername(),true));
-        return ResponseEntity.ok().body(BaseResponse.of("가입하신 이메일로 인증번호가 전송되었습니다.", HttpStatus.CREATED.value(), new SignupResponseDto(requestDto.getUsername())));
+
+        return ResponseEntity.ok().body(BaseResponse.of("회원가입이 완료되었습니다. 최초 로그인 시 이메일 인증을 진행해주세요.", HttpStatus.CREATED.value(), new SignupResponseDto(requestDto.getUsername())));
     }
 
     //메일 인증
@@ -40,10 +40,11 @@ public class UserController {
     //로그인
     @PostMapping("/login")
     public ResponseEntity<BaseResponse<Void>> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response) {
-        userService.login(requestDto);
-        //로그인 가능 시 토큰 생성 후 헤더에 넣기
+        String message = userService.login(requestDto);
+
+        //토큰 생성 후 헤더에 넣기
         response.setHeader("Authorization", jwtUtil.createToken(requestDto.getUsername(),true));
-        return ResponseEntity.ok().body(BaseResponse.of("로그인 성공", HttpStatus.OK.value(), null));
+        return ResponseEntity.ok().body(BaseResponse.of(message, HttpStatus.OK.value(), null));
     }
 
     //로그아웃

@@ -2,7 +2,7 @@ package com.sparta.newsfeed.user;
 
 public enum UserRoleEnum {
     USER(Authority.USER),  // 사용자 권한
-    GUEST(Authority.GUEST);  // 관리자 권한
+    GUEST(Authority.GUEST);  // 게스트 권한
 
     private final String authority;
 

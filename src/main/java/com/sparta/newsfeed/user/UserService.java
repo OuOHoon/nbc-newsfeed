@@ -42,11 +42,6 @@ public class UserService {
 
         User user = new User(username, password, UserRoleEnum.GUEST);
         userRepository.save(user);
-
-        //인증 번호 생성 후 메일 보내기
-        int authCode = makeRandomCode();
-        sendAuthCode(username, authCode);
-        authCodeRepository.save(new AuthCode(username, authCode));
     }
 
     //메일 인증 성공 후 userRole 변경
@@ -55,9 +50,14 @@ public class UserService {
 
         AuthCode authCode = authCodeRepository.findByUsername(userDetails.getUsername()).orElseThrow(NotFoundUserException::new);
 
-        //인증번호 만료시간 검사 - 1시간
+        //인증번호 만료시간 검사 - 10분
         Duration duration = Duration.between(authCode.getCreatedAt(), LocalDateTime.now());
-        if(duration.getSeconds() > 3600) throw new ExpiredAuthCodeException();
+
+        //10분이 경과했다면 엔티티 삭제하고 다시 인증하라는 메시지 보내기
+        if(duration.getSeconds() > 600) {
+            authCodeRepository.delete(authCode);
+            throw new ExpiredAuthCodeException();
+        }
 
         //인증번호 일치 검사
         if(requestDto.getAuthcode() != authCode.getCode()) throw new WrongAuthCodeException();
@@ -68,15 +68,29 @@ public class UserService {
     }
 
     //로그인
-    public void login(LoginRequestDto requestDto) {
+    public String login(LoginRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
         User user = userRepository.findByUsername(username).orElseThrow(NotFoundUserException::new);
 
+        //비밀번호 일치여부 검사
         if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new WrongPasswordException();
         }
+
+        //Role이 GUEST일 시 이메일 인증 과정 진행
+        if(user.getRole().equals(UserRoleEnum.GUEST)) {
+
+            //인증 번호 생성 후 메일 보내기
+            int authCode = makeRandomCode();
+            sendAuthCode(username, authCode);
+            authCodeRepository.save(new AuthCode(username, authCode));
+            return "가입하신 이메일로 인증코드가 발송되었습니다.";
+        }
+
+        //이메일 인증 과정이 이미 끝나서 User Role이 USER일 시 그냥 로그인
+        return "로그인이 완료되었습니다.";
     }
 
     //비밀번호 변경
