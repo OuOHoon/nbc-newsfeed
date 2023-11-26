@@ -19,7 +19,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<RedirectView> createPost(@RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<RedirectView> createPost(@Valid @RequestBody PostRequestDto requestDto,
+                                                   @AuthenticationPrincipal UserDetailsImpl userDetails){
         Long postId = postService.createPost(requestDto, userDetails.getUser());
         RedirectView redirectView = new RedirectView("/api/posts/" + postId);
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY.value()).body(redirectView);
@@ -38,14 +39,17 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<RedirectView> updatePost(@PathVariable Long postId, @RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<RedirectView> updatePost(@PathVariable Long postId,
+                                                   @Valid @RequestBody PostRequestDto requestDto,
+                                                   @AuthenticationPrincipal UserDetailsImpl userDetails){
         postService.updatePost(postId, requestDto, userDetails.getUser());
         RedirectView redirectView = new RedirectView("/api/posts/" + postId);
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY.value()).body(redirectView);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<RedirectView> deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<RedirectView> deletePost(@PathVariable Long postId,
+                                                   @AuthenticationPrincipal UserDetailsImpl userDetails){
         postService.deletePost(postId, userDetails.getUser());
         RedirectView redirectView = new RedirectView("/api/posts");
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY.value()).body(redirectView);
