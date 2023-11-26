@@ -3,6 +3,7 @@ package com.sparta.newsfeed.common;
 
 import com.sparta.newsfeed.common.exception.comment.NoPrivilegesException;
 import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
+import com.sparta.newsfeed.common.exception.follow.SelfFollowException;
 import com.sparta.newsfeed.common.exception.like.AlreadyLikeException;
 import com.sparta.newsfeed.common.exception.like.NotFoundLikeException;
 import com.sparta.newsfeed.common.exception.like.SelfLikeException;
@@ -122,6 +123,11 @@ public class GlobalExceptionController {
 
     @ExceptionHandler(AlreadyLikeException.class)
     public ResponseEntity<BaseResponse<Void>> alreadyLikeException(AlreadyLikeException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), false, null));
+    }
+
+    @ExceptionHandler(SelfFollowException.class)
+    public ResponseEntity<BaseResponse<Void>> selfFollowException(SelfFollowException e) {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(), false, null));
     }
 }

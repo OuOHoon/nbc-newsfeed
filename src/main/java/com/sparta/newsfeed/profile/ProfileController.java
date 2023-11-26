@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users/{userId}/profiles")
-@Tag(name = "Profile", description = "프로필 생성, 수정, 조회 / 프로필 이미지 추가, 수정, 조회, 삭제")
+@Tag(name = "Profile", description = "프로필 API")
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -87,10 +88,11 @@ public class ProfileController {
         return ResponseEntity.ok(BaseResponse.of("프로필 수정", true, dto));
     }
 
-    @RequestMapping(value = "/image", method = {RequestMethod.POST, RequestMethod.PUT})
+    @PutMapping(value = "/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "유저 프로필 이미지 수정", description = "유저의 프로필 이미지를 수정하고 저장한 S3 Url을 반환합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "프로필 이미지 추가 성공", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "200", description = "프로필 이미지 수정 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "4xx", description = "에러 메세지",
                     content = @Content(
                             schema = @Schema(implementation = BaseResponse.class),
