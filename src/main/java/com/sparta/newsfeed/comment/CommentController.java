@@ -30,6 +30,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    @PostMapping
     @Operation(summary = "댓글 작성", description = "댓글을 작성합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "댓글 작성 성공", useReturnTypeSchema = true),
