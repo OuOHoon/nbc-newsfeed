@@ -33,7 +33,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             //유효한 토큰이 아니라면 오류메시지 전달
             if(!jwtUtil.validateToken(tokenValue)) {
                 ObjectMapper objectMapper = new ObjectMapper();
-                BaseResponse<String> baseResponse = new BaseResponse<>("유효한 토큰이 아닙니다.", 400, null);
+                BaseResponse<String> baseResponse = new BaseResponse<>("유효한 토큰이 아닙니다.", false, null);
                 response.setStatus(400);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");

@@ -19,11 +19,13 @@ public class Profile {
     @Column(name = "profile_id")
     private Long id;
 
-    @Column(length = 255)
+    @Column(length = 255, unique = true)
     private String nickname;
 
     @Column(length = 255)
     private String introduction;
+
+    private String imageUrl;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -36,5 +38,8 @@ public class Profile {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

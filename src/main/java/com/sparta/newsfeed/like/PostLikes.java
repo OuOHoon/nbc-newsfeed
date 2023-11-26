@@ -7,10 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "likes")
+@Table(name = "post_likes")
 @Getter
 @NoArgsConstructor
-public class Likes {
+public class PostLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
@@ -24,7 +24,7 @@ public class Likes {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Likes(Post post, User user){
+    public PostLikes(Post post, User user){
         this.post = post;
         this.user = user;
     }

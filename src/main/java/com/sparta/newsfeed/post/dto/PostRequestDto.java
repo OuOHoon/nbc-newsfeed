@@ -1,4 +1,4 @@
-package com.sparta.newsfeed.post;
+package com.sparta.newsfeed.post.dto;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
