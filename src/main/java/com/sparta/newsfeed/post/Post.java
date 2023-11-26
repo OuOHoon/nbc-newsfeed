@@ -61,7 +61,7 @@ public class Post {
     }
 
     public int decreaseCount(){
-        return ++likesCount;
+        return --likesCount;
     }
 
     public void setWeight(double weight){

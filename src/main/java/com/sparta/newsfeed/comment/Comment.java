@@ -60,6 +60,6 @@ public class Comment {
 	}
 
 	public int decreaseCount(){
-		return ++likesCount;
+		return --likesCount;
 	}
 }
