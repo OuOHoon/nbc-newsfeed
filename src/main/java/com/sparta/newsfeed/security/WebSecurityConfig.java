@@ -51,6 +51,8 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/api/users/signup").permitAll()
                         .requestMatchers("/api/users/login").permitAll()
+                        .requestMatchers("/api/users/mail-auth").hasRole("GUEST")
+                        .requestMatchers("/api/users/logout").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/api/posts").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/posts/{postId}").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/posts/{postId}/comments").permitAll()

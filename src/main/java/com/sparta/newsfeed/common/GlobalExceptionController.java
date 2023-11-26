@@ -1,5 +1,6 @@
 package com.sparta.newsfeed.common;
 
+
 import com.sparta.newsfeed.common.exception.comment.NoPrivilegesException;
 import com.sparta.newsfeed.common.exception.comment.NotFoundCommentException;
 import com.sparta.newsfeed.common.exception.comment.NotFoundPostException;
@@ -61,6 +62,18 @@ public class GlobalExceptionController {
         return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
                 HttpStatus.BAD_REQUEST.value(), null));
     }
+
+
+    @ExceptionHandler(WrongAuthCodeException.class)
+    public ResponseEntity<BaseResponse<Void>> wrongAuthCodeException(WrongAuthCodeException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), null));
+    }
+
+    @ExceptionHandler(ExpiredAuthCodeException.class)
+    public ResponseEntity<BaseResponse<Void>> expiredAuthCodeException(ExpiredAuthCodeException e) {
+        return ResponseEntity.badRequest().body(BaseResponse.of(e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(), null));
 
     @ExceptionHandler(NoPrivilegesException.class)
     public ResponseEntity<String> handleNoPrivilegesException(NoPrivilegesException e) {

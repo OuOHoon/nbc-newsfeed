@@ -4,10 +4,7 @@ import com.sparta.newsfeed.common.BaseResponse;
 
 import com.sparta.newsfeed.security.JwtUtil;
 import com.sparta.newsfeed.security.UserDetailsImpl;
-import com.sparta.newsfeed.user.dto.ChangePasswordRequestDto;
-import com.sparta.newsfeed.user.dto.LoginRequestDto;
-import com.sparta.newsfeed.user.dto.SignupRequestDto;
-import com.sparta.newsfeed.user.dto.SignupResponseDto;
+import com.sparta.newsfeed.user.dto.*;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,18 +23,28 @@ public class UserController {
 
     //회원가입
     @PostMapping("/signup")
-    public ResponseEntity<BaseResponse<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<BaseResponse<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto requestDto, HttpServletResponse response) {
+        // 회원가입 로직 -> user table에 저장하고 Role은 GUEST로 둠.
         userService.signup(requestDto);
-        return ResponseEntity.ok().body(BaseResponse.of("회원가입 성공", HttpStatus.CREATED.value(), new SignupResponseDto(requestDto.getUsername())));
+
+        return ResponseEntity.ok().body(BaseResponse.of("회원가입이 완료되었습니다. 최초 로그인 시 이메일 인증을 진행해주세요.", HttpStatus.CREATED.value(), new SignupResponseDto(requestDto.getUsername())));
+    }
+
+    //메일 인증
+    @PostMapping("/mail-auth")
+    public ResponseEntity<BaseResponse<Void>> mailAuth(@RequestBody MailAuthRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.mailAuth(requestDto, userDetails);
+        return ResponseEntity.ok().body(BaseResponse.of("인증 처리가 완료되었습니다.", HttpStatus.OK.value(), null));
     }
 
     //로그인
     @PostMapping("/login")
     public ResponseEntity<BaseResponse<Void>> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response) {
-        userService.login(requestDto);
-        //로그인 가능 시 토큰 생성 후 헤더에 넣기
-        response.setHeader("Authorization", jwtUtil.createToken(requestDto.getUsername(), true));
-        return ResponseEntity.ok().body(BaseResponse.of("로그인 성공", HttpStatus.OK.value(), null));
+        String message = userService.login(requestDto);
+
+        //토큰 생성 후 헤더에 넣기
+        response.setHeader("Authorization", jwtUtil.createToken(requestDto.getUsername(),true));
+        return ResponseEntity.ok().body(BaseResponse.of(message, HttpStatus.OK.value(), null));
     }
 
     //로그아웃

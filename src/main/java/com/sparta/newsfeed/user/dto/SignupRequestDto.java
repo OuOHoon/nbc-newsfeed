@@ -10,12 +10,12 @@ import lombok.Setter;
 @Setter
 public class SignupRequestDto {
 
-    @Pattern(regexp = "^[a-z0-9]{6,12}$")
-    //최소 6자 이상, 12자 이하이며 알파벳 소문자(a~z), 숫자(0~9)
+    @Pattern(regexp = "^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$", message = "올바르지 않은 이메일 형식입니다.")
+    //이메일 형식만 가능
     private String username;
 
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z0-9]{8,15}$")
+    @Pattern(regexp = "^[A-Za-z0-9]{8,15}$", message = "올바르지 않은 비밀번호 형식입니다.")
     //최소 8자 이상, 15자 이하이며 알파벳 대소문자(a~z, A~Z), 숫자(0~9)
     private String password;
 
