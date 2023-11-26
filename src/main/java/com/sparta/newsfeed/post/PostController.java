@@ -44,7 +44,7 @@ public class PostController {
     }
 
     @Operation(summary = "뉴스피드 페이지", description = "모든 포스트를 팔로우, 좋아요, 작성일에 따라 계산된 가중치로 정렬하여 조회")
-    @ApiResponse(responseCode = "200", description = "뉴스피드 페이지 조회")
+    @ApiResponse(responseCode = "200", description = "뉴스피드 페이지 조회", useReturnTypeSchema = true)
     @Parameters({
             @Parameter(description = "페이지 번호", name = "page"),
             @Parameter(description = "한 페이지의 포스트 수", name = "size")

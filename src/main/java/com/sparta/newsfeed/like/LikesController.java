@@ -24,7 +24,7 @@ public class LikesController {
 
     @Operation(summary = "포스트 좋아요")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "좋아요가 완료 되었습니다"),
+            @ApiResponse(responseCode = "200", description = "좋아요가 완료 되었습니다", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "4XX", description = "에러 메세지",
                     content = @Content(
                             schema = @Schema(implementation = BaseResponse.class),
@@ -43,7 +43,7 @@ public class LikesController {
 
     @Operation(summary = "포스트 좋아요 취소")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "좋아요가 취소 되었습니다"),
+            @ApiResponse(responseCode = "200", description = "좋아요가 취소 되었습니다", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "에러 메세지",
                     content = @Content(
                             schema = @Schema(implementation = BaseResponse.class),
@@ -62,7 +62,7 @@ public class LikesController {
 
     @Operation(summary = "댓글 좋아요")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "좋아요가 완료 되었습니다"),
+            @ApiResponse(responseCode = "200", description = "좋아요가 완료 되었습니다", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "4XX", description = "에러 메세지",
                     content = @Content(
                             schema = @Schema(implementation = BaseResponse.class),
@@ -82,7 +82,7 @@ public class LikesController {
 
     @Operation(summary = "댓글 좋아요 취소")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "좋아요가 취소 되었습니다"),
+            @ApiResponse(responseCode = "200", description = "좋아요가 취소 되었습니다", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "4XX", description = "에러 메세지",
                     content = @Content(
                             schema = @Schema(implementation = BaseResponse.class),
