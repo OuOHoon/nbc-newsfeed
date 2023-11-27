@@ -55,8 +55,11 @@ public class Comment {
 		this.text = dto.getText();
 	}
 
-	public Integer countLikes() {
-		this.likesCount = likesList.size();
-		return this.likesCount;
+	public int increaseCount(){
+		return ++likesCount;
+	}
+
+	public int decreaseCount(){
+		return --likesCount;
 	}
 }

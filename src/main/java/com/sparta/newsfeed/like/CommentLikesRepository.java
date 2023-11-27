@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface postLikesRepository extends JpaRepository<PostLikes, Long> {
-    Optional<PostLikes> findByPostIdAndUserId(Long postId, Long userId);
+public interface CommentLikesRepository extends JpaRepository<CommentLikes, Long> {
+    Optional<CommentLikes> findByCommentIdAndUserId(Long commentId, Long userId);
 }

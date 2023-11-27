@@ -41,11 +41,11 @@ public class PostService {
                                              @RequestParam("size") int size,
                                              UserDetailsImpl userDetails) {
 
-        // 유저 조회인 경우
-        if (userDetails.getUser().getRole().equals(UserRoleEnum.USER)) {
-            calculateWeightForUser(userDetails.getUser());
-        } else { // 게스트 조회인 경우
+        // 게스트 조회인 경우
+        if (userDetails == null || userDetails.getUser().getRole().equals(UserRoleEnum.GUEST)) {
             calculateWeightForGuests();
+        } else { // 유저 조회인 경우
+            calculateWeightForUser(userDetails.getUser());
         }
         Sort sort = Sort.by(Sort.Direction.DESC, "weight");
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -84,6 +84,10 @@ public class PostService {
 
         double maxLikes = postRepository.findTopByOrderByLikesCountDesc().orElseThrow(NotFoundPostException::new)
                 .getLikesCount();
+        //좋아요가 한개도 없는 경우
+        if(maxLikes == 0) {
+            maxLikes = 1;
+        }
 
         for (Post post : postRepository.findAll()) {
             double likeScore = post.getLikesCount() / maxLikes * LIKE * 2;
@@ -102,6 +106,10 @@ public class PostService {
 
         double maxLikes = postRepository.findTopByOrderByLikesCountDesc().orElseThrow(NotFoundPostException::new)
                 .getLikesCount();
+        //좋아요가 한개도 없는 경우
+        if(maxLikes == 0) {
+            maxLikes = 1;
+        }
 
         for (Post post : postRepository.findAll()) {
             double followScore = 0;

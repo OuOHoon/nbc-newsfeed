@@ -16,6 +16,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -32,12 +34,23 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if(StringUtils.hasText(tokenValue)) {
             //유효한 토큰이 아니라면 오류메시지 전달
             if(!jwtUtil.validateToken(tokenValue)) {
+
+                //해당 URI에서는 유효하지 않은 토큰이라도 요청을 거부하지 않음
+                ArrayList<String> URIList = new ArrayList<>(List.of("/api/users/login", "/api/users/signup"));
+                String URI = request.getRequestURI();
+                if( URIList.contains(URI) || (request.getMethod().equals("GET") && URI.startsWith("/api/posts"))) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
+                //오류 메시지 반환
                 ObjectMapper objectMapper = new ObjectMapper();
                 BaseResponse<String> baseResponse = new BaseResponse<>("유효한 토큰이 아닙니다.", false, null);
                 response.setStatus(400);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(objectMapper.writeValueAsString(baseResponse));
+                response.getOutputStream().write(objectMapper.writeValueAsBytes(baseResponse));
+//                response.getWriter().write(objectMapper.writeValueAsString(baseResponse));
                 return;
             }
 
