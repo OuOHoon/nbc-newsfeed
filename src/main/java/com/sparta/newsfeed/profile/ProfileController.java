@@ -122,9 +122,8 @@ public class ProfileController {
                             )
                     ))
     })
-    public ResponseEntity<BaseResponse<String>> getProfileImage(@PathVariable Long userId,
-                                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String imageUrl = profileService.getProfileImage(userId, userDetails.getUser());
+    public ResponseEntity<BaseResponse<String>> getProfileImage(@PathVariable Long userId) {
+        String imageUrl = profileService.getProfileImage(userId);
         return ResponseEntity.ok(BaseResponse.of("프로필 사진 조회", true, imageUrl));
     }
 

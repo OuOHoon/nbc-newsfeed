@@ -91,7 +91,7 @@ public class ProfileService {
         return uploadUrl;
     }
 
-    public String getProfileImage(Long userId, User user) {
+    public String getProfileImage(Long userId) {
         Profile profile = profileRepository.findByUserId(userId).orElseThrow(NotFoundUserException::new);
         return profile.getImageUrl();
     }
