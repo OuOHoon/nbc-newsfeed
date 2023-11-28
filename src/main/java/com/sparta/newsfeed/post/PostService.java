@@ -37,9 +37,7 @@ public class PostService {
     }
 
     @Transactional
-    public Page<PostResponseDto> getAllPosts(@RequestParam("page") int page,
-                                             @RequestParam("size") int size,
-                                             UserDetailsImpl userDetails) {
+    public Page<PostResponseDto> getAllPosts(int page, int size, UserDetailsImpl userDetails) {
 
         // 게스트 조회인 경우
         if (userDetails == null || userDetails.getUser().getRole().equals(UserRoleEnum.GUEST)) {
